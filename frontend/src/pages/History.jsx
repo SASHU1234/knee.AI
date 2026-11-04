@@ -1,0 +1,248 @@
+import { useContext, useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { deleteAnalysis, imageUrl, listAnalyses, getAnalysis, downloadReport, updateAdvice } from '../lib/api'
+import { useLanguage } from '../lib/LanguageContext'
+import { Card, Empty, ErrorNote, SeverityBadge, Spinner } from '../components/ui'
+import Icon from '../components/Icon'
+import { AuthContext } from '../App'
+
+const FILTER_VALUES = ['All', 'Normal', 'Mild OA', 'Moderate OA', 'Severe OA']
+const FILTER_KEYS = {
+  All: 'filterAll', Normal: 'classNormal', 'Mild OA': 'classMild',
+  'Moderate OA': 'classModerate', 'Severe OA': 'classSevere',
+}
+
+export default function History() {
+  const { userRole } = useContext(AuthContext)
+  const { t } = useLanguage()
+  const isDoctor = userRole === 'doctor'
+
+  const [items, setItems] = useState(null)
+  const [error, setError] = useState('')
+  const [filter, setFilter] = useState('All')
+  const [query, setQuery] = useState('')
+  const [downloadingId, setDownloadingId] = useState(null)
+  const [adviceModal, setAdviceModal] = useState({ open: false, id: null, text: '' })
+
+  const load = () => listAnalyses().then((d) => setItems(d.items)).catch((e) => setError(e.message))
+  useEffect(() => { load() }, [])
+
+  async function remove(id) {
+    setError('')
+    try {
+      await deleteAnalysis(id)
+      setItems((list) => list.filter((i) => i.analysis_id !== id))
+    } catch (e) {
+      setError(e.message)
+    }
+  }
+
+  async function handleDownload(id) {
+    setDownloadingId(id)
+    setError('')
+    try {
+      const fullResult = await getAnalysis(id)
+      await downloadReport(fullResult)
+    } catch (e) {
+      setError('Failed to download report: ' + e.message)
+    } finally {
+      setDownloadingId(null)
+    }
+  }
+
+  async function saveAdvice() {
+    try {
+      await updateAdvice(adviceModal.id, adviceModal.text)
+      setItems(items.map(i => i.analysis_id === adviceModal.id ? { ...i, advice: adviceModal.text } : i))
+      setAdviceModal({ open: false, id: null, text: '' })
+    } catch (e) {
+      setError('Failed to save advice: ' + e.message)
+    }
+  }
+
+  if (error && !items) return <ErrorNote>{error}</ErrorNote>
+  if (!items) return <Spinner label={t('loadingHistory')} />
+
+  const visible = items.filter((i) => {
+    const passFilter = filter === 'All' || i.classification === filter
+    const passQuery = i.patient.name.toLowerCase().includes(query.trim().toLowerCase())
+    return passFilter && passQuery
+  })
+
+  return (
+    <div className="space-y-6">
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h2 className="page-title">{t('navHistory')}</h2>
+          <p className="text-[13px] text-muted mt-1 font-display">{items.length} {t('historyStoredSuffix')}</p>
+        </div>
+        <Link to="/new" className="btn-primary"><Icon name="scan" size={15} />{t('navNewAnalysis')}</Link>
+      </div>
+
+      <ErrorNote>{error}</ErrorNote>
+
+      {items.length === 0 ? (
+        <Empty
+          title={t('nothingStoredYet')}
+          body={t('nothingStoredBody')}
+          cta={{ to: '/new', label: t('runAnAnalysis') }}
+        />
+      ) : (
+        <Card
+          eyebrow={t('archive')}
+          title={t('storedAnalyses')}
+          icon="history"
+          action={
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="relative">
+                <Icon
+                  name="search" size={14}
+                  className="absolute left-2.5 top-1/2 -translate-y-1/2 text-ink-300 pointer-events-none"
+                />
+                <input
+                  className="input h-8 w-44 pl-8 text-[13px]"
+                  placeholder={t('searchPatient')}
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                />
+              </div>
+              <div className="flex gap-1">
+                {FILTER_VALUES.map((f) => (
+                  <button
+                    key={f}
+                    onClick={() => setFilter(f)}
+                    className={[
+                      'h-8 px-2.5 rounded-[8px] text-[12px] font-display font-semibold transition-all duration-150',
+                      filter === f
+                        ? 'text-accent bg-accent-light'
+                        : 'text-muted hover:bg-page',
+                    ].join(' ')}
+                    style={{ border: filter === f ? '2px solid #2D2016' : '2px solid transparent' }}
+                  >
+                    {t(FILTER_KEYS[f])}
+                  </button>
+                ))}
+              </div>
+            </div>
+          }
+        >
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr>
+                  <th className="th">{t('tableScan')}</th>
+                  <th className="th">{t('tablePatient')}</th>
+                  <th className="th">{t('tableDate')}</th>
+                  <th className="th">{t('tableAssessment')}</th>
+                  <th className="th">{t('tableKl')}</th>
+                  <th className="th">{t('tableMeanThickness')}</th>
+                  <th className="th">{t('tablePrimaryImplant')}</th>
+                  <th className="th text-right">{t('tableActions')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {visible.map((r) => (
+                  <tr key={r.analysis_id} className="row-hover">
+                    <td className="td">
+                      <img
+                        src={imageUrl(r.thumbnail)}
+                        alt=""
+                        className="w-11 h-11 object-cover rounded-[8px] bg-stage"
+                        style={{ border: '2px solid #2D2016' }}
+                      />
+                    </td>
+                    <td className="td">
+                      <div className="font-display font-semibold text-navy">{r.patient.name}</div>
+                      <div className="text-muted text-[11px]">
+                        {r.patient.age} · {r.patient.sex === 'Female' ? t('female') : t('male')} ·{' '}
+                        {r.patient.affected_side === 'Left' ? t('left') : t('right')}
+                      </div>
+                    </td>
+                    <td className="td text-muted font-display">{r.created_at.replace('T', ' ')}</td>
+                    <td className="td"><SeverityBadge value={r.classification} /></td>
+                    <td className="td font-display font-bold text-navy tnum">{r.kl_grade}</td>
+                    <td className="td tnum font-display">{r.mean_thickness_mm.toFixed(2)} mm</td>
+                    <td className="td font-display">
+                      {r.primary_implant}
+                      <span className="text-muted"> · {r.confidence_pct}%</span>
+                    </td>
+                    <td className="td text-right whitespace-nowrap">
+                      <div className="inline-flex items-center gap-1">
+                        <Link
+                          to={`/results/${r.analysis_id}`}
+                          className="inline-flex items-center gap-1 h-7 px-2 rounded-[8px] text-accent
+                                     font-display font-semibold text-[12px] transition-colors duration-150 hover:bg-accent-light"
+                        >
+                          {t('open')}
+                        </Link>
+                        <button
+                          onClick={() => handleDownload(r.analysis_id)}
+                          disabled={downloadingId === r.analysis_id}
+                          className="inline-flex items-center gap-1 h-7 px-2 rounded-[8px] text-muted
+                                     font-display font-semibold text-[12px] transition-colors duration-150 hover:bg-page hover:text-navy disabled:opacity-50"
+                        >
+                          <Icon name="download" size={13} /> {downloadingId === r.analysis_id ? t('wait') : t('pdf')}
+                        </button>
+
+                        {isDoctor && (
+                          <button
+                            onClick={() => setAdviceModal({ open: true, id: r.analysis_id, text: r.advice || '' })}
+                            className="inline-flex items-center gap-1 h-7 px-2 rounded-[8px] text-accent
+                                       font-display font-semibold text-[12px] transition-colors duration-150 hover:bg-accent-light"
+                          >
+                            <Icon name="edit" size={13} /> {t('advice')}
+                          </button>
+                        )}
+
+                        <button
+                          onClick={() => remove(r.analysis_id)}
+                          className="inline-flex items-center justify-center w-7 h-7 rounded-[8px] text-ink-300
+                                     transition-colors duration-150 hover:bg-danger-light hover:text-danger"
+                          aria-label={t('deleteAnalysisLabel')}
+                        >
+                          <Icon name="trash" size={14} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+                {visible.length === 0 && (
+                  <tr>
+                    <td className="td text-muted font-display" colSpan={8}>{t('noMatchFilter')}</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </Card>
+      )}
+      {adviceModal.open && (
+        <div className="fixed inset-0 z-50 bg-navy/20 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-[16px] shadow-xl p-6 w-full max-w-md" style={{ border: '3px solid #2D2016' }}>
+            <h3 className="font-serif text-lg text-navy mb-4 font-bold">{t('addMedicalAdvice')}</h3>
+            <textarea
+              className="input w-full h-32 resize-none text-[13px] p-3 mb-4"
+              placeholder={t('adviceNotesPlaceholder')}
+              value={adviceModal.text}
+              onChange={e => setAdviceModal({ ...adviceModal, text: e.target.value })}
+            />
+            <div className="flex gap-2 justify-end">
+              <button
+                className="px-4 py-2 rounded-[8px] text-[13px] font-display font-semibold text-muted hover:bg-page"
+                onClick={() => setAdviceModal({ open: false, id: null, text: '' })}
+              >
+                {t('cancel')}
+              </button>
+              <button
+                className="btn-primary px-6"
+                onClick={saveAdvice}
+              >
+                {t('save')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}

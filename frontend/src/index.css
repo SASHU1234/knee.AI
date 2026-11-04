@@ -1,0 +1,158 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { -webkit-font-smoothing: antialiased; }
+
+  body {
+    @apply bg-page text-body font-sans text-[14px];
+    letter-spacing: 0.01em;
+  }
+
+  table, .tnum { font-variant-numeric: tabular-nums; }
+
+  ::selection { background: #E8DCC8; color: #1A130D; }
+
+  :focus-visible {
+    outline: 2px solid #E8772E;
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+}
+
+@layer components {
+  /* ---------- surfaces (toon 3D style) ---------- */
+  .card {
+    @apply bg-surface rounded-card shadow-card;
+    border: 2px solid #2D2016;
+  }
+  .card-hover {
+    @apply transition-all duration-200;
+  }
+  .card-hover:hover {
+    box-shadow: 6px 6px 0 #2D2016;
+    transform: translate(-2px, -2px);
+  }
+  .card-pad { @apply p-6; }
+
+  .card-head {
+    @apply flex flex-wrap items-center justify-between gap-3 px-6 py-4;
+    border-bottom: 2px solid #2D2016;
+  }
+
+  /* ---------- type ---------- */
+  .page-title { @apply text-[28px] font-serif font-medium text-navy tracking-tight leading-tight; }
+  .eyebrow {
+    @apply text-[10px] font-bold uppercase tracking-widest text-muted;
+    font-family: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  }
+  .card-title {
+    @apply text-[15px] font-semibold text-navy tracking-normal;
+    font-family: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  }
+  .card-sub { @apply text-[13px] text-muted leading-relaxed font-light; }
+  .metric { @apply text-[36px] font-serif font-medium text-navy tracking-tight leading-none tnum; }
+
+  /* ---------- forms ---------- */
+  .label {
+    @apply block text-[13px] font-medium text-navy mb-2;
+    font-family: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  }
+  .input {
+    @apply w-full h-10 px-3 rounded-[10px] bg-surface text-[14px]
+           text-navy placeholder:text-muted/60 outline-none transition-all duration-200;
+    border: 2px solid #2D2016;
+  }
+  .input:hover { border-color: #E8772E; }
+  .input:focus { border-color: #E8772E; box-shadow: 3px 3px 0 #E8772E40; }
+
+  /* ---------- buttons (toon 3D) ---------- */
+  .btn {
+    font-family: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+    @apply inline-flex items-center justify-center gap-2 h-10 px-5 rounded-[10px] whitespace-nowrap
+           text-[13px] font-semibold transition-all duration-150
+           disabled:opacity-45 disabled:cursor-not-allowed disabled:shadow-none;
+  }
+  .btn-primary {
+    @apply btn bg-accent text-white;
+    border: 2px solid #2D2016;
+    box-shadow: 3px 3px 0 #2D2016;
+  }
+  .btn-primary:hover:not(:disabled) {
+    box-shadow: 1px 1px 0 #2D2016;
+    transform: translate(2px, 2px);
+  }
+  .btn-primary:active:not(:disabled) {
+    box-shadow: 0 0 0 #2D2016;
+    transform: translate(3px, 3px);
+  }
+  .btn-dark {
+    @apply btn bg-navy text-white;
+    border: 2px solid #2D2016;
+    box-shadow: 3px 3px 0 #2D2016;
+  }
+  .btn-dark:hover:not(:disabled) {
+    box-shadow: 1px 1px 0 #2D2016;
+    transform: translate(2px, 2px);
+  }
+  .btn-ghost {
+    @apply btn bg-surface text-navy;
+    border: 2px solid #2D2016;
+    box-shadow: 3px 3px 0 #2D2016;
+  }
+  .btn-ghost:hover:not(:disabled) {
+    @apply bg-page;
+    box-shadow: 1px 1px 0 #2D2016;
+    transform: translate(2px, 2px);
+  }
+
+  /* ---------- tables ---------- */
+  .th {
+    font-family: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+    @apply text-left text-[11px] font-semibold uppercase tracking-wider
+           text-muted pb-3 px-4;
+    border-bottom: 2px solid #2D2016;
+  }
+  .td {
+    @apply text-[14px] text-body px-4 align-middle font-light;
+    height: 56px;
+    border-bottom: 1px solid #E8DCC8;
+  }
+  .row-hover { @apply transition-colors duration-200 hover:bg-page; }
+
+  /* ---------- pills (toon style with borders) ---------- */
+  .pill {
+    @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[12px] font-semibold whitespace-nowrap;
+    font-family: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+    border: 2px solid #2D2016;
+  }
+  .pill-neg { @apply pill bg-danger-light text-danger; }
+  .pill-pos { @apply pill bg-ok-light text-ok; }
+  .pill-blue { @apply pill bg-accent-light text-accent; }
+  .pill-amber { @apply pill bg-warn-light text-warn; }
+
+  /* ---------- segmented control ---------- */
+  .segment {
+    @apply inline-flex items-center gap-2 h-8 px-3 rounded-[8px] text-[13px] font-medium
+           transition-all duration-200;
+    font-family: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+    border: 2px solid #2D2016;
+  }
+  .segment-on {
+    @apply segment bg-surface text-navy;
+    box-shadow: 2px 2px 0 #2D2016;
+  }
+  .segment-off {
+    @apply segment bg-transparent text-muted;
+    border-color: transparent;
+  }
+  .segment-off:hover { @apply bg-page/80 text-navy; border-color: #E8DCC8; }
+
+  /* ---------- misc ---------- */
+  .divider { @apply h-px w-full bg-line-light; }
+  .stage {
+    @apply rounded-[12px] overflow-hidden bg-stage;
+    border: 2px solid #2D2016;
+  }
+}

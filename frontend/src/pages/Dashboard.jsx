@@ -1,0 +1,116 @@
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { listAnalyses } from '../lib/api'
+import { useLanguage } from '../lib/LanguageContext'
+import { Card, Empty, ErrorNote, SeverityBadge, Spinner, Stat } from '../components/ui'
+import Icon from '../components/Icon'
+
+export default function Dashboard() {
+  const [items, setItems] = useState(null)
+  const [error, setError] = useState('')
+  const { t } = useLanguage()
+
+  useEffect(() => {
+    listAnalyses().then((d) => setItems(d.items)).catch((e) => setError(e.message))
+  }, [])
+
+  if (error) return <ErrorNote>{error}</ErrorNote>
+  if (!items) return <Spinner label={t('loadingDashboard')} />
+
+  const total = items.length
+  const severe = items.filter((i) => i.classification === 'Severe OA').length
+  const meanKL = total ? (items.reduce((s, i) => s + i.kl_grade, 0) / total).toFixed(1) : '—'
+  const meanConf = total ? (items.reduce((s, i) => s + i.confidence_pct, 0) / total).toFixed(1) : '—'
+  const recent = items.slice(0, 6)
+
+  return (
+    <div className="space-y-6">
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h2 className="page-title">{t('navDashboard')}</h2>
+          <p className="text-[13px] text-muted mt-1">{t('dashboardSubtitle')}</p>
+        </div>
+        <Link to="/new" className="btn-primary"><Icon name="scan" size={15} />{t('navNewAnalysis')}</Link>
+      </div>
+
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <Stat label={t('statAnalysesRun')} value={total} icon="layers" />
+        <Stat label={t('statSevereOa')} value={severe} tone={severe ? 'bad' : 'good'} icon="activity"
+              hint={total ? `${((severe / total) * 100).toFixed(0)}% ${t('ofTheCohort')}` : t('noCasesYet')} />
+        <Stat label={t('statMeanKl')} value={meanKL} unit="/ 4" icon="ruler" tone="amber" />
+        <Stat label={t('statMeanImplantMatch')} value={meanConf} unit="%" tone="accent" icon="implant" />
+      </div>
+
+      {total === 0 ? (
+        <Empty
+          title={t('noAnalysesYet')}
+          body={t('noAnalysesBody')}
+          cta={{ to: '/new', label: t('runFirstAnalysis') }}
+        />
+      ) : (
+        <Card
+          eyebrow={t('activity')}
+          title={t('recentAnalyses')}
+          icon="history"
+          action={
+            <Link to="/history" className="inline-flex items-center gap-1 text-[12px] font-display font-semibold text-accent">
+              {t('viewAll')} <Icon name="chevron" size={13} />
+            </Link>
+          }
+        >
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr>
+                  <th className="th">{t('tablePatient')}</th>
+                  <th className="th">{t('tableSide')}</th>
+                  <th className="th">{t('tableAssessment')}</th>
+                  <th className="th">{t('tableKl')}</th>
+                  <th className="th">{t('tablePrimaryImplant')}</th>
+                  <th className="th">{t('tableMatch')}</th>
+                  <th className="th"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {recent.map((r) => (
+                  <tr key={r.analysis_id} className="row-hover">
+                    <td className="td">
+                      <div className="flex items-center gap-3">
+                        <span
+                          className="w-8 h-8 rounded-[8px] bg-accent text-white flex items-center
+                                     justify-center text-[11px] font-display font-bold shrink-0"
+                          style={{ border: '2px solid #2D2016' }}
+                        >
+                          {r.patient.name.slice(0, 2).toUpperCase()}
+                        </span>
+                        <div>
+                          <div className="font-display font-semibold text-navy">{r.patient.name}</div>
+                          <div className="text-muted text-[11px]">
+                            {r.patient.age} · {r.patient.sex === 'Female' ? t('female') : t('male')} · {r.patient.imaging_type}
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="td font-display">{r.patient.affected_side === 'Left' ? t('left') : t('right')}</td>
+                    <td className="td"><SeverityBadge value={r.classification} /></td>
+                    <td className="td font-display font-bold text-navy tnum">{r.kl_grade}</td>
+                    <td className="td font-display">{r.primary_implant}</td>
+                    <td className="td font-display font-semibold tnum">{r.confidence_pct}%</td>
+                    <td className="td text-right">
+                      <Link
+                        to={`/results/${r.analysis_id}`}
+                        className="inline-flex items-center gap-1 text-accent font-display font-semibold text-[13px]"
+                      >
+                        {t('open')} <Icon name="chevron" size={13} />
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Card>
+      )}
+    </div>
+  )
+}
