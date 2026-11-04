@@ -117,6 +117,7 @@ export default function ChatWidget() {
                 {t('chatGreeting')}
               </div>
             )}
+            <p className="text-[10px] text-muted font-display leading-snug px-1">{t('aiPrivacyNote')}</p>
             {messages.map((m, i) => (
               <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div

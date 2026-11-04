@@ -204,6 +204,7 @@ function PatientHeader({ result, onGetAdvice, gettingAdvice, onGetVision, gettin
             {result.sample_source ? ` · ${result.sample_source}` : ''}
           </span>
         )}
+        <span className="w-full text-[10px] leading-snug">{t('aiPrivacyNote')}</span>
       </div>
     </div>
   )

@@ -31,6 +31,7 @@ export const LANGUAGE_NAMES = Object.fromEntries(LANGUAGES.map((l) => [l.code, l
 
 const en = {
   getAiVisualScan: 'AI Visual Scan',
+  aiPrivacyNote: 'AI features send chat text, study context and images to an external AI provider (OpenRouter). Free default models: synthetic/demo data only — no real patient data.',
   scanningImage: 'Scanning...',
   aiVisualObservationsTitle: 'AI Visual Observations',
   navAbout: 'About',
@@ -373,6 +374,7 @@ const en = {
 
 const hi = {
   getAiVisualScan: 'AI विज़ुअल स्कैन',
+  aiPrivacyNote: 'AI सुविधाएँ चैट टेक्स्ट, स्टडी कॉन्टेक्स्ट और इमेज एक बाहरी AI प्रदाता (OpenRouter) को भेजती हैं। मुफ़्त डिफ़ॉल्ट मॉडल: केवल सिंथेटिक/डेमो डेटा — वास्तविक मरीज़ों का डेटा नहीं।',
   scanningImage: 'स्कैन हो रहा है...',
   aiVisualObservationsTitle: 'AI विज़ुअल अवलोकन',
   navAbout: 'हमारे बारे में',
@@ -715,6 +717,7 @@ const hi = {
 
 const ta = {
   getAiVisualScan: 'AI காட்சி ஸ்கேன்',
+  aiPrivacyNote: 'AI அம்சங்கள் அரட்டை உரை, ஆய்வு தகவல் மற்றும் படங்களை வெளிப்புற AI வழங்குநருக்கு (OpenRouter) அனுப்புகின்றன. இலவச இயல்புநிலை மாதிரிகள்: செயற்கை/டெமோ தரவு மட்டும் — உண்மையான நோயாளர் தரவு அல்ல.',
   scanningImage: 'ஸ்கேன் செய்கிறது...',
   aiVisualObservationsTitle: 'AI காட்சி அவதானிப்புகள்',
   navAbout: 'எங்களை பற்றி',
@@ -1057,6 +1060,7 @@ const ta = {
 
 const ml = {
   getAiVisualScan: 'AI വിഷ്വൽ സ്കാൻ',
+  aiPrivacyNote: 'AI ഫീച്ചറുകൾ ചാറ്റ് ടെക്സ്റ്റും സ്റ്റഡി കോൺടെക്സ്റ്റും ചിത്രങ്ങളും ഒരു ബാഹ്യ AI ദാതാവിന് (OpenRouter) അയയ്ക്കും. സൗജന്യ ഡിഫോൾട്ട് മോഡലുകൾ: സിന്തറ്റിക്/ഡെമോ ഡാറ്റ മാത്രം — യഥാർത്ഥ രോഗി ഡാറ്റ അല്ല.',
   scanningImage: 'സ്കാൻ ചെയ്യുന്നു...',
   aiVisualObservationsTitle: 'AI വിഷ്വൽ നിരീക്ഷണങ്ങൾ',
   navAbout: 'ഞങ്ങളെക്കുറിച്ച്',
@@ -1399,6 +1403,7 @@ const ml = {
 
 const te = {
   getAiVisualScan: 'AI విజువల్ స్కాన్',
+  aiPrivacyNote: 'AI ఫీచర్లు చాట్ టెక్స్ట్, స్టడీ కాంటెక్స్ట్ మరియు ఇమేజ్‌లను బాహ్య AI ప్రొవైడర్‌కి (OpenRouter) పంపుతాయి. ఉచిత డిఫాల్ట్ మోడళ్లు: సింతటిక్/డెమో డేటా మాత్రమే — నిజమైన రోగి డేటా కాదు.',
   scanningImage: 'స్కాన్ చేస్తోంది...',
   aiVisualObservationsTitle: 'AI విజువల్ పరిశీలనలు',
   navAbout: 'మా గురించి',
