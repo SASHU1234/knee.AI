@@ -44,8 +44,9 @@ trained measurement model; no live model weights for that part ship with this re
   study you're viewing, plus a one-shot "Get AI Food Diet" write-up per analysis. Models are
   configurable per feature (default `nvidia/nemotron-3.5-lightning:free`; any chat model on
   OpenRouter works through the same OpenAI-compatible endpoint).
-- **Multi-language UI** — English (default), Hindi, Tamil, Malayalam, Telugu. Chat and food-advice
-  replies are generated directly in the selected language; see [Multi-language](#multi-language).
+- **Multi-language UI** — English (default), Hindi, Tamil, Malayalam, Telugu. AI text is always
+  generated in English and translated locally on language change; see
+  [Multi-language](#multi-language) and [Local AI translation](#local-ai-translation).
 - **Research Mode** — batch-upload a cohort (or run the bundled samples) for descriptive
   statistics: thickness distributions, OA/sex/age-band comparisons, correlations, and an implant
   sizing summary. Studies that fail the quality check are excluded by default. See
@@ -409,13 +410,142 @@ Tamil, Malayalam, Telugu via a flat dictionary (`frontend/src/lib/i18n.js`) and
 **Not translated, deliberately**: text assembled server-side by interpolating computed values
 into English sentences — measurement rationale, KL descriptions, quality-factor detail, implant
 manufacturer/system names, research correlation captions. Translating that means localizing the
-backend's string assembly, not just adding UI labels. AI-generated text (chat, food advice) isn't
-in the dictionary either, but *does* speak the selected language — the frontend passes the
-language name to the backend, which folds a "respond in {language}" instruction into the prompt.
+backend's string assembly, not just adding UI labels. AI-generated text (AI Visual Scan, food advice,
+Clinician Note, chat replies) is covered by [local translation](#local-ai-translation) instead.
 
 Classification values (`Normal`/`Mild OA`/`Moderate OA`/`Severe OA`), sex, and side stay the
 literal English strings the backend returns everywhere they're used as data (badge color mapping,
 filters, chart series keys) — only the *displayed* label is translated.
+
+---
+
+## Local AI translation
+
+AI text is always generated in **English** (the frontend sends `language: "English"` to OpenRouter
+regardless of the website language). Changing the website language then translates the
+*already-generated* text on your own machine — no OpenRouter request, no tokens, no cloud
+translator. The English original is never overwritten; switching back to English restores it
+instantly.
+
+- **Model:** [`ai4bharat/indictrans2-en-indic-dist-200M`](https://huggingface.co/ai4bharat/indictrans2-en-indic-dist-200M)
+  (MIT, one model for hi/ta/ml/te, ~1.1 GB download, ~1.3 GB RAM when loaded, CPU inference).
+  Pinned to revision `2cfd0a20057756d756bf3e53528f492afc52f91a`; its remote code was reviewed
+  before enabling `trust_remote_code` (`docs/translation-model-review.md`).
+- **Covers:** AI Visual Scan, Food Advice, Clinician Note, AI chat assistant messages.
+- **Clinical terms stay in English** (e.g. *Medial joint space narrowing*, *osteophytes*, *AP view*,
+  *fibula*, *Kellgren-Lawrence/KL grade*, *MRI*, *X-ray*, *femur*, *tibia*, *varus/valgus*), as do
+  numbers, units, dates and file/study IDs. They come from the central dictionary
+  `backend/services/medical_terminology.py` (whole-word, longest-phrase-first matching; abbreviations
+  such as `AP`/`PA`/`CT` match upper-case only). To protect another term, add it there. If a protected
+  value is lost or altered the translation is rejected and the English text stays visible.
+- **Meaning checks (rule-based, no extra model):** every translated sentence must keep negation
+  (no/not/without/absent) and its qualifiers ("no *definite* effusion"), hedges (possible/probable/suspected/
+  appears/may indicate), approximation (about/approximately before a measurement), left/right, the direction
+  and roles of comparisons (narrower/wider/greater/less than), severity words (mild/moderate/severe), the
+  order of proximal/distal/medial/lateral terms, and which finding sits with which location in multi-clause
+  sentences ("narrowing medially, sclerosis laterally"). A sentence that cannot be confirmed makes the whole
+  translation fail, the English text stays visible and nothing is cached. (`backend/services/clinical_semantics.py`)
+  The model reads "No ..." as the abbreviation for "number", so "no" is sent to it as "not any".
+- **Caching:** in the browser tab's memory only, keyed by study + feature + source-text hash +
+  language + pipeline version. The server's `pipeline_version` fingerprints the whole pipeline (terminology
+  dictionary, "no" input rewrite, spacing/colon repair, meaning-check rules, model revision); the browser
+  re-checks it with a cheap status call whenever the language changes, so translations from an older pipeline
+  are never shown or reused, only regenerated locally. Failed translations are never cached; nothing is written to storage or server logs.
+- **Machine translation notice:** translated cards say so. It is a display convenience, not a
+  clinically validated translation; the English text is the source of truth.
+
+First-time setup (local backend only):
+
+```bash
+pip install -r backend/requirements.txt -r backend/requirements-translation.txt
+# For CPU-only PyTorch: pip install torch --index-url https://download.pytorch.org/whl/cpu
+# 1) accept the model terms at the model page above  2) log in once:  hf auth login
+python tools/download_translation_model.py      # weights -> backend/.models/ (git-ignored)
+```
+
+Then start the backend as usual. The model loads lazily on the first translation (~7 s) and stays
+loaded. `GET /api/translate/status` reports availability; set `TRANSLATION_ENABLED=0` to disable.
+
+**Known limitations.** Machine translation can soften or reorder hedges (e.g. "about 2.4 mm"),
+and a 200M model can still miss nuance, so clinicians should read the English original for decisions.
+The meaning checks are word-list based: they cannot verify which finding a location word belongs to,
+"about"/"approximately", or wording outside their lists (such sentences are rejected, not accepted), so
+some translations fall back to English (9 of 144 synthetic test translations, all of them genuinely wrong or unverifiable).
+Typical CPU speed is 1-3 s per short paragraph. **Vercel:** the serverless backend (50 MB limit)
+cannot host PyTorch or the weights, so there `/api/translate` answers `503`, the UI keeps showing
+the English text with a short notice, and nothing else is affected. Translation is available
+when running the backend locally (or on any host that can install the extra requirements).
+
+---
+
+## Clinical workflow: evidence, comparison, review, demo
+
+Four features sit around the existing analysis, none of them changes a stored result:
+
+- **Clinical Evidence & Provenance** (expandable panel on every study; `GET/POST /api/provenance/{study_id}`).
+  Data lineage only, built from the stored record: patient/study metadata, each measurement with value, unit,
+  side, algorithm and timestamp, implant sizing, image quality, and the analysis origin (pre-analysed
+  reference sidecar vs hash-seeded simulation - stated honestly). Anything not recorded (imaging view,
+  algorithm version number) is listed as unavailable. AI observations are shown separately with the
+  provider/model/time the *server* recorded at generation; the server signs that block (HMAC), so the panel
+  can show "server-verified". AI text is not stored by the platform, so only this session's observations
+  appear. There are no confidence scores, saliency maps or explanations of model reasoning. AI provenance is
+  returned by `/api/vision` and `/api/advice` only when the request sets `include_provenance: true`; the
+  default responses are unchanged. Set `PROVENANCE_SECRET` in production (otherwise signatures last until the
+  backend restarts).
+- **Longitudinal Comparison** (`/compare/:id`; `GET /api/longitudinal/{id}/candidates`, `POST
+  /api/longitudinal/compare`, `GET /api/longitudinal/{id}/series`). The platform stores **no patient ID**: a
+  study has the name/sex/side/modality typed at upload inside one account, so "same patient" means same
+  normalised name and sex in that account, and every response says so. Comparison is refused for different
+  patient, side, modality or measurement method, non-chronological order, duplicate images, decreasing age;
+  the imaging view is not recorded, so that is always a warning. Allowed comparisons show stored values,
+  absolute and percentage difference (original values, rounded only for display; zero/missing handled),
+  side-by-side images with preserved aspect ratio, a timeline and, with three or more values, a trend chart
+  at the real dates without interpolation. Wording is "observed measurement difference"; nothing says
+  progression or improvement. History lookups are filtered by patient name and capped at 50.
+- **Clinician Review** (`POST /api/reviews`, `GET /api/reviews/{study_id}[/{review_id}]`). Decisions
+  (confirmed / needs further review / disagreed + comment <= 1000 chars) are appended as immutable audit events
+  with previous/new state; the reviewer is the authenticated account (derived from the session token, never
+  from the request), labelled "Reviewer" because this system does not verify clinical roles. Reviewable items
+  are the stored measurements, classification, implant sizing, the report, and this session's AI observations
+  (the exact text is snapshotted with its hash). Duplicate submissions (same `request_id`, or an identical
+  consecutive decision) create nothing; a stale `expected_previous_state` is a 409. Storage:
+  - **Supabase `study_reviews`** (append-only, RLS) once you apply `docs/migrations/001_study_reviews.sql`
+    (additive; rollback at the end of the file; **not applied automatically**).
+  - Until then the API falls back to a **local append-only file** and says so (`persistence: "local_file"`):
+    useful in development, not a durable clinical record, and not available on Vercel's read-only filesystem.
+  `REVIEW_STORE=auto|supabase|file` overrides the choice.
+- **Guided Demo** (`/demo`, linked from the Dashboard and sidebar). Ten stages on a bundled synthetic case:
+  study overview, image inspection, AI Visual Scan, quantitative analysis, implant module, multilingual,
+  provenance, longitudinal comparison, review, report. The case is analysed in memory by the normal builder
+  (`GET /api/demo/cases/{source}`), never saved to your history. AI Visual Scan has two explicit modes:
+  **Live AI** (the real `/api/vision` call, only when you press the button; a failure stays an error) and
+  **Pre-generated** (pre-written synthetic text from `backend/data/demo/cached_ai.json`, labelled as such, valid
+  only for the exact sample image hash, analysis model and fixture version; it is never substituted for a
+  failed live call). The longitudinal stage uses a labelled **synthetic** three-study series
+  (`backend/data/demo/longitudinal_demo.json`, values authored for the demo) plus an intentionally rejected
+  right-knee example. The review stage is simulated on screen only and labelled so. The report stage uses
+  the existing PDF endpoint. Changing the language translates the AI text locally and makes no AI request.
+
+**SYNTH-KNEE-006 (synthetic longitudinal case).** A second demo series with two examinations of one fictional
+patient, built from two radiographs supplied for the demo (`backend/data/demo/synth_knee_006/`: a single right knee,
+"STANDING", and a bilateral "AP STANDING" film from which the pipeline selects the right knee). The workflow is the
+app's own: upload the baseline, upload the follow-up, open Longitudinal Comparison.
+`tools/make_synth_knee_006.py` replays it through the real `POST /api/analyze` (auth stubbed, nothing saved) and
+stores each result as its own record (`baseline.json`, `followup.json`). `/api/analyze` and the upload form accept
+three **optional** fields - patient ID, examination date, imaging view - plus `.webp`; omit them and nothing
+changes. For records that carry a patient ID, **identity is decided by that ID only** (never name or sex: a namesake
+with another ID is a different patient, an ID-less record never matches an ID-bearing one) and history discovery
+queries by ID; chronology uses the examination date and a recorded view must match. Records without IDs keep the
+original name+sex rule. Limits, stated in the UI: these images are not reference samples, so the meniscus/bone/implant
+numbers come from the platform's deterministic simulation (hash-seeded from the image bytes), not from measuring the
+anatomy (knee region and image quality are computed from the pixels); age, sex and dates are synthetic inputs; the
+images are not verified films of one person; the side (Right) was read from the images. Differences are descriptive and
+never a progression claim. Pick the series with the selector on the demo's longitudinal stage
+(`GET /api/demo/longitudinal?series_id=SYNTH-KNEE-006`).
+
+All new endpoints require the normal login (and MFA). Tests: `tests/test_clinical_workflow.py` (backend,
+fake Supabase, no OpenRouter) and the Vitest suites under `frontend/src` (`npm test`).
 
 ---
 

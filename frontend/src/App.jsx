@@ -15,6 +15,8 @@ import ImplantSizing from './pages/ImplantSizing'
 import Auth from './pages/Auth'
 import MfaChallenge from './pages/MfaChallenge'
 import ChatWidget from './components/ChatWidget'
+import Longitudinal from './pages/Longitudinal'
+import GuidedDemo from './pages/GuidedDemo'
 
 export const AuthContext = createContext(null)
 
@@ -106,6 +108,9 @@ export default function App() {
               <Route path="/implant" element={<ImplantSizing />} />
               <Route path="/implant/:id" element={<ImplantSizing />} />
               <Route path="/history" element={<History />} />
+              <Route path="/compare" element={<Longitudinal />} />
+              <Route path="/compare/:id" element={<Longitudinal />} />
+              <Route path="/demo" element={<GuidedDemo />} />
               <Route path="/research" element={<Research />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/about" element={<About />} />

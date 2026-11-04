@@ -1,0 +1,9 @@
+# Optional, local-only translation engine (NOT installed on Vercel).
+# Install on top of requirements.txt:  pip install -r backend/requirements-translation.txt
+# For CPU-only torch use: pip install torch --index-url https://download.pytorch.org/whl/cpu
+torch>=2.2
+transformers==4.51.3
+sentencepiece>=0.2.0
+sacremoses
+IndicTransToolkit==1.1.1
+huggingface_hub

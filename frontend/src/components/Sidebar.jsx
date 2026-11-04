@@ -8,6 +8,8 @@ const NAV = [
   { to: '/oa', key: 'navOa', icon: 'ruler' },
   { to: '/implant', key: 'navImplant', icon: 'implant' },
   { to: '/history', key: 'navHistory', icon: 'history' },
+  { to: '/compare', key: 'navCompare', icon: 'activity' },
+  { to: '/demo', key: 'navDemo', icon: 'sparkle' },
   { to: '/research', key: 'navResearch', icon: 'layers' },
   { to: '/settings', key: 'navSettings', icon: 'settings' },
   { to: '/about', key: 'navAbout', icon: 'file' },

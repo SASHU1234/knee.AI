@@ -1,0 +1,243 @@
+{
+ "_label": "SYNTHETIC DEMONSTRATION DATA. These three examinations are authored for the guided demo. They are not measurements of a real person and are never stored in any user's history. The image shown is the shipped sample OAI_sample_03 for every date.",
+ "series_id": "DEMO-SERIES-001",
+ "image_source": "OAI_sample_03",
+ "studies": [
+  {
+   "analysis_id": "demo-long-1",
+   "created_at": "2023-04-12T09:30:00",
+   "image_hash": "demo-series-hash-1",
+   "source_filename": "OAI_sample_03.png",
+   "patient": {
+    "name": "DEMO-SERIES-001 (synthetic)",
+    "age": 56,
+    "sex": "Female",
+    "imaging_type": "X-ray",
+    "affected_side": "Left"
+   },
+   "provenance": {
+    "method": "Synthetic demonstration series (values authored for the guided demo, not measured)",
+    "segmentation": "n/a (synthetic)"
+   },
+   "meniscus": {
+    "measurements": [
+     {
+      "location": "anterior_horn",
+      "label": "Anterior Horn",
+      "thickness_mm": 3.9
+     },
+     {
+      "location": "mid_body",
+      "label": "Mid-Body",
+      "thickness_mm": 3.5
+     },
+     {
+      "location": "posterior_horn",
+      "label": "Posterior Horn",
+      "thickness_mm": 4.2
+     }
+    ],
+    "assessment": {
+     "mean_thickness_mm": 3.8666666666666667,
+     "min_thickness_mm": 3.5,
+     "classification": "Moderate OA"
+    },
+    "kl_grade": {
+     "grade": 2
+    }
+   },
+   "bone_measurements": {
+    "femoral_ml_mm": 65.0,
+    "femoral_ap_mm": 56.4,
+    "tibial_ml_mm": 67.1,
+    "tibial_ap_mm": 43.2,
+    "tibial_slope_deg": 8.0
+   },
+   "images": {
+    "variants": {
+     "none": "OAI_sample_03.png"
+    },
+    "width": null,
+    "height": null
+   },
+   "synthetic": true
+  },
+  {
+   "analysis_id": "demo-long-2",
+   "created_at": "2024-04-10T10:05:00",
+   "image_hash": "demo-series-hash-2",
+   "source_filename": "OAI_sample_03.png",
+   "patient": {
+    "name": "DEMO-SERIES-001 (synthetic)",
+    "age": 57,
+    "sex": "Female",
+    "imaging_type": "X-ray",
+    "affected_side": "Left"
+   },
+   "provenance": {
+    "method": "Synthetic demonstration series (values authored for the guided demo, not measured)",
+    "segmentation": "n/a (synthetic)"
+   },
+   "meniscus": {
+    "measurements": [
+     {
+      "location": "anterior_horn",
+      "label": "Anterior Horn",
+      "thickness_mm": 3.8
+     },
+     {
+      "location": "mid_body",
+      "label": "Mid-Body",
+      "thickness_mm": 3.4
+     },
+     {
+      "location": "posterior_horn",
+      "label": "Posterior Horn",
+      "thickness_mm": 4.0
+     }
+    ],
+    "assessment": {
+     "mean_thickness_mm": 3.733333333333333,
+     "min_thickness_mm": 3.4,
+     "classification": "Moderate OA"
+    },
+    "kl_grade": {
+     "grade": 2
+    }
+   },
+   "bone_measurements": {
+    "femoral_ml_mm": 65.2,
+    "femoral_ap_mm": 56.3,
+    "tibial_ml_mm": 67.0,
+    "tibial_ap_mm": 43.3,
+    "tibial_slope_deg": 8.2
+   },
+   "images": {
+    "variants": {
+     "none": "OAI_sample_03.png"
+    },
+    "width": null,
+    "height": null
+   },
+   "synthetic": true
+  },
+  {
+   "analysis_id": "demo-long-3",
+   "created_at": "2025-04-15T08:50:00",
+   "image_hash": "demo-series-hash-3",
+   "source_filename": "OAI_sample_03.png",
+   "patient": {
+    "name": "DEMO-SERIES-001 (synthetic)",
+    "age": 58,
+    "sex": "Female",
+    "imaging_type": "X-ray",
+    "affected_side": "Left"
+   },
+   "provenance": {
+    "method": "Synthetic demonstration series (values authored for the guided demo, not measured)",
+    "segmentation": "n/a (synthetic)"
+   },
+   "meniscus": {
+    "measurements": [
+     {
+      "location": "anterior_horn",
+      "label": "Anterior Horn",
+      "thickness_mm": 3.6
+     },
+     {
+      "location": "mid_body",
+      "label": "Mid-Body",
+      "thickness_mm": 3.2
+     },
+     {
+      "location": "posterior_horn",
+      "label": "Posterior Horn",
+      "thickness_mm": 3.9
+     }
+    ],
+    "assessment": {
+     "mean_thickness_mm": 3.5666666666666664,
+     "min_thickness_mm": 3.2,
+     "classification": "Moderate OA"
+    },
+    "kl_grade": {
+     "grade": 2
+    }
+   },
+   "bone_measurements": {
+    "femoral_ml_mm": 65.1,
+    "femoral_ap_mm": 56.4,
+    "tibial_ml_mm": 67.0,
+    "tibial_ap_mm": 43.2,
+    "tibial_slope_deg": 8.1
+   },
+   "images": {
+    "variants": {
+     "none": "OAI_sample_03.png"
+    },
+    "width": null,
+    "height": null
+   },
+   "synthetic": true
+  }
+ ],
+ "rejected_example": {
+  "analysis_id": "demo-long-4",
+  "created_at": "2025-06-01T11:00:00",
+  "image_hash": "demo-series-hash-4",
+  "source_filename": "OAI_sample_03.png",
+  "patient": {
+   "name": "DEMO-SERIES-001 (synthetic)",
+   "age": 58,
+   "sex": "Female",
+   "imaging_type": "X-ray",
+   "affected_side": "Right"
+  },
+  "provenance": {
+   "method": "Synthetic demonstration series (values authored for the guided demo, not measured)",
+   "segmentation": "n/a (synthetic)"
+  },
+  "meniscus": {
+   "measurements": [
+    {
+     "location": "anterior_horn",
+     "label": "Anterior Horn",
+     "thickness_mm": 3.7
+    },
+    {
+     "location": "mid_body",
+     "label": "Mid-Body",
+     "thickness_mm": 3.3
+    },
+    {
+     "location": "posterior_horn",
+     "label": "Posterior Horn",
+     "thickness_mm": 4.0
+    }
+   ],
+   "assessment": {
+    "mean_thickness_mm": 3.6666666666666665,
+    "min_thickness_mm": 3.3,
+    "classification": "Moderate OA"
+   },
+   "kl_grade": {
+    "grade": 2
+   }
+  },
+  "bone_measurements": {
+   "femoral_ml_mm": 64.9,
+   "femoral_ap_mm": 56.5,
+   "tibial_ml_mm": 66.9,
+   "tibial_ap_mm": 43.0,
+   "tibial_slope_deg": 8.0
+  },
+  "images": {
+   "variants": {
+    "none": "OAI_sample_03.png"
+   },
+   "width": null,
+   "height": null
+  },
+  "synthetic": true
+ }
+}

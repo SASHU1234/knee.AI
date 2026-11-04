@@ -3,6 +3,9 @@ import { Link, NavLink, useLocation, useParams } from 'react-router-dom'
 import { getAnalysis, downloadReport, getFoodAdvice, getVisionObservations, listAnalyses } from '../lib/api'
 import { useLanguage } from '../lib/LanguageContext'
 import { LANGUAGE_NAMES } from '../lib/i18n'
+import TranslatedBlock from './TranslatedBlock'
+import EvidencePanel from './EvidencePanel'
+import ReviewPanel from './ReviewPanel'
 import { Card, CompareBar, ErrorNote, SeverityBadge, Spinner } from './ui'
 import Icon, { IconChip } from './Icon'
 
@@ -391,13 +394,17 @@ export function AnalysisShell({ children }) {
   const [visionResult, setVisionResult] = useState('')
   const [visionError, setVisionError] = useState('')
   const [gettingVision, setGettingVision] = useState(false)
+  // Server-signed provenance + text of AI output generated in this session (feeds Evidence and Review)
+  const [aiItems, setAiItems] = useState([])
+  const [showReview, setShowReview] = useState(false)
 
   const handleGetAdvice = async () => {
     setGettingAdvice(true)
     setAdviceError('')
     try {
-      const { advice } = await getFoodAdvice(result, LANGUAGE_NAMES[language])
+      const { advice, provenance } = await getFoodAdvice(result, LANGUAGE_NAMES[language])
       setFoodAdvice(advice)
+      if (provenance) setAiItems((xs) => [...xs.filter((x) => x.provenance.kind !== 'food_advice'), { provenance, text: advice, label: 'AI Food Advice' }])
     } catch (e) {
       setAdviceError(e.message)
     } finally {
@@ -410,8 +417,9 @@ export function AnalysisShell({ children }) {
     setVisionError('')
     try {
       const filename = result.images?.variants?.none
-      const { observations } = await getVisionObservations(filename, result, LANGUAGE_NAMES[language])
+      const { observations, provenance } = await getVisionObservations(filename, result, LANGUAGE_NAMES[language])
       setVisionResult(observations)
+      if (provenance) setAiItems((xs) => [...xs.filter((x) => x.provenance.kind !== 'visual_scan'), { provenance, text: observations, label: 'AI Visual Scan observation' }])
     } catch (e) {
       setVisionError(e.message)
     } finally {
@@ -478,16 +486,16 @@ export function AnalysisShell({ children }) {
 
       {result.advice && (
         <Card eyebrow="Clinician Note" title={t('clinicianNote')} icon="file" tone="green">
-          <p className="text-[13px] text-navy font-display leading-relaxed whitespace-pre-wrap">{result.advice}</p>
+          <TranslatedBlock className="text-[13px] text-navy font-display leading-relaxed whitespace-pre-wrap" source={result.advice} studyId={result.analysis_id} feature="clinician_note" contentType="clinician_note" />
         </Card>
       )}
 
       {(visionResult || visionError) && (
-        <Card eyebrow={t('aiGenerated')} title={t('aiVisualObservationsTitle')} icon="search" tone="blue">
+        <Card id="ai-visual-scan" eyebrow={t('aiGenerated')} title={t('aiVisualObservationsTitle')} icon="search" tone="blue">
           {visionError ? (
             <ErrorNote>{visionError}</ErrorNote>
           ) : (
-            <p className="text-[13px] text-navy font-display leading-relaxed whitespace-pre-wrap">{visionResult}</p>
+            <TranslatedBlock className="text-[13px] text-navy font-display leading-relaxed whitespace-pre-wrap" source={visionResult} studyId={result.analysis_id} feature="vision" contentType="visual_observations" />
           )}
         </Card>
       )}
@@ -497,12 +505,22 @@ export function AnalysisShell({ children }) {
           {adviceError ? (
             <ErrorNote>{adviceError}</ErrorNote>
           ) : (
-            <p className="text-[13px] text-navy font-display leading-relaxed whitespace-pre-wrap">{foodAdvice}</p>
+            <TranslatedBlock className="text-[13px] text-navy font-display leading-relaxed whitespace-pre-wrap" source={foodAdvice} studyId={result.analysis_id} feature="food_advice" contentType="food_advice" />
           )}
         </Card>
       )}
 
       {children(result)}
+
+      <EvidencePanel studyId={result.analysis_id} aiItems={aiItems} />
+
+      <div className="flex flex-wrap gap-3">
+        <button type="button" className="btn-ghost" onClick={() => setShowReview((v) => !v)} aria-expanded={showReview}>
+          <Icon name="check" size={15} />{t('reviewTitle')}
+        </button>
+        <Link to={`/compare/${result.analysis_id}`} className="btn-ghost"><Icon name="history" size={15} />{t('longTitle')}</Link>
+      </div>
+      {showReview && <ReviewPanel studyId={result.analysis_id} aiItems={aiItems} />}
     </div>
   )
 }

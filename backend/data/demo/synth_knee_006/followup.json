@@ -1,0 +1,267 @@
+{
+ "analysis_id": "synth006-followup",
+ "created_at": "2026-11-05T02:50:44",
+ "image_hash": "07cacb5f7d9dbf812c34236a9826f005d973d6118e646c93901a04d8d46b3d7f",
+ "source_filename": "followup_bilateral_ap_standing.png",
+ "mode": "model_inference",
+ "mode_label": "Model Inference",
+ "provenance": {
+  "method": "AI segmentation pipeline with hash-seeded inference.",
+  "segmentation": "Proportional zones fitted to the detected bone region."
+ },
+ "patient": {
+  "name": "SYNTH-KNEE-006",
+  "age": 57,
+  "sex": "Female",
+  "imaging_type": "X-ray",
+  "affected_side": "Right"
+ },
+ "meniscus": {
+  "measurements": [
+   {
+    "location": "anterior_horn",
+    "label": "Anterior Horn",
+    "thickness_mm": 4.4
+   },
+   {
+    "location": "mid_body",
+    "label": "Mid-Body",
+    "thickness_mm": 3.5
+   },
+   {
+    "location": "posterior_horn",
+    "label": "Posterior Horn",
+    "thickness_mm": 4.2
+   }
+  ],
+  "assessment": {
+   "classification": "Mild OA",
+   "base_classification": "Mild OA",
+   "age_escalated": false,
+   "sex_adjusted": true,
+   "age_band": "50-60",
+   "mean_thickness_mm": 4.03,
+   "min_thickness_mm": 3.5,
+   "thresholds_mm": {
+    "severe": 2.35,
+    "moderate": 3.35,
+    "mild": 4.35
+   },
+   "rationale": [
+    "Mean medial meniscus thickness 4.03 mm (min 3.5 mm at Mid-Body).",
+    "Patient profile: Female \u00b7 age 57 (band 50-60) \u2014 thresholds adjusted accordingly.",
+    "Adjusted thresholds: severe < 2.35 mm, moderate < 3.35 mm, mild < 4.35 mm.",
+    "Female sex: thresholds shifted \u22120.3 mm to account for population differences."
+   ]
+  },
+  "kl_grade": {
+   "grade": 2,
+   "description": "Definite osteophytes, possible joint space narrowing."
+  },
+  "population_comparison": [
+   {
+    "location": "anterior_horn",
+    "label": "Anterior Horn",
+    "patient": 4.4,
+    "population_male": 5.4,
+    "population_female": 5.0,
+    "deviation_mm": -0.6,
+    "deviation_pct": -12.0
+   },
+   {
+    "location": "mid_body",
+    "label": "Mid-Body",
+    "patient": 3.5,
+    "population_male": 5.0,
+    "population_female": 4.6,
+    "deviation_mm": -1.1,
+    "deviation_pct": -23.9
+   },
+   {
+    "location": "posterior_horn",
+    "label": "Posterior Horn",
+    "patient": 4.2,
+    "population_male": 6.0,
+    "population_female": 5.5,
+    "deviation_mm": -1.3,
+    "deviation_pct": -23.6
+   }
+  ]
+ },
+ "implant": {
+  "patient_dimensions_mm": {
+   "femoral_ml": 66.5,
+   "femoral_ap": 63.1,
+   "tibial_ml": 71.6,
+   "tibial_ap": 45.3
+  },
+  "primary": {
+   "system_id": "dps-sigma",
+   "manufacturer": "DePuy Synthes",
+   "system": "SIGMA Fixed Bearing Knee",
+   "type": "Posterior Stabilized",
+   "size": "L",
+   "dimensions": {
+    "femoral_ml": 68.5,
+    "femoral_ap": 61.5,
+    "tibial_ml": 71.5,
+    "tibial_ap": 47.0
+   },
+   "built_in_slope_deg": 3.0,
+   "distance_mm": 3.08,
+   "confidence_pct": 85.1,
+   "deltas_mm": {
+    "femoral_ml": -2.0,
+    "femoral_ap": 1.6,
+    "tibial_ml": 0.1,
+    "tibial_ap": -1.7
+   },
+   "max_abs_delta_mm": 2.0
+  },
+  "alternatives": [
+   {
+    "system_id": "zb-vanguard",
+    "manufacturer": "Zimmer Biomet",
+    "system": "Vanguard Complete Knee",
+    "type": "Posterior Stabilized",
+    "size": "M",
+    "dimensions": {
+     "femoral_ml": 67.5,
+     "femoral_ap": 61.0,
+     "tibial_ml": 69.0,
+     "tibial_ap": 46.5
+    },
+    "built_in_slope_deg": 0.0,
+    "distance_mm": 3.69,
+    "confidence_pct": 82.4,
+    "deltas_mm": {
+     "femoral_ml": -1.0,
+     "femoral_ap": 2.1,
+     "tibial_ml": 2.6,
+     "tibial_ap": -1.2
+    },
+    "max_abs_delta_mm": 2.6
+   },
+   {
+    "system_id": "zb-persona",
+    "manufacturer": "Zimmer Biomet",
+    "system": "Persona The Personalized Knee",
+    "type": "Cruciate Retaining",
+    "size": "L",
+    "dimensions": {
+     "femoral_ml": 70.0,
+     "femoral_ap": 63.0,
+     "tibial_ml": 72.0,
+     "tibial_ap": 48.0
+    },
+    "built_in_slope_deg": 3.0,
+    "distance_mm": 4.44,
+    "confidence_pct": 79.2,
+    "deltas_mm": {
+     "femoral_ml": -3.5,
+     "femoral_ap": 0.1,
+     "tibial_ml": -0.4,
+     "tibial_ap": -2.7
+    },
+    "max_abs_delta_mm": 3.5
+   }
+  ],
+  "slope_note": "Measured tibial slope 8.9deg vs 3.0deg built into the SIGMA Fixed Bearing Knee baseplate; resection plan should absorb the 5.9deg difference.",
+  "method": "Euclidean distance across femoral ML/AP and tibial ML/AP against each catalogued size centroid."
+ },
+ "bone_measurements": {
+  "femoral_ml_mm": 66.5,
+  "femoral_ap_mm": 63.1,
+  "tibial_ml_mm": 71.6,
+  "tibial_ap_mm": 45.3,
+  "tibial_slope_deg": 8.9,
+  "aspect_ratio_femur": 1.05,
+  "aspect_ratio_tibia": 1.58
+ },
+ "images": {
+  "variants": {
+   "none": "4ea1279b1a35_original.png",
+   "femur": "4ea1279b1a35_femur.png",
+   "meniscus": "4ea1279b1a35_meniscus.png",
+   "femur-meniscus": "4ea1279b1a35_femur-meniscus.png",
+   "tibia": "4ea1279b1a35_tibia.png",
+   "femur-tibia": "4ea1279b1a35_femur-tibia.png",
+   "meniscus-tibia": "4ea1279b1a35_meniscus-tibia.png",
+   "femur-meniscus-tibia": "4ea1279b1a35_femur-meniscus-tibia.png"
+  },
+  "base_url": "/api/images",
+  "width": 550,
+  "height": 550,
+  "roi": {
+   "x": 14,
+   "y": 0,
+   "w": 272,
+   "h": 550,
+   "detected": true
+  }
+ },
+ "overlay_colors": {
+  "femur": "#3B82F6",
+  "meniscus": "#10B981",
+  "tibia": "#EF4444"
+ },
+ "quality": {
+  "score_pct": 78,
+  "level": "good",
+  "level_label": "Good",
+  "review_recommended": false,
+  "factors": [
+   {
+    "name": "Resolution",
+    "detail": "387 px effective resolution over the measured region",
+    "score_pct": 53,
+    "status": "low"
+   },
+   {
+    "name": "Sharpness",
+    "detail": "Laplacian variance 353",
+    "score_pct": 98,
+    "status": "good"
+   },
+   {
+    "name": "Contrast",
+    "detail": "Intensity spread 76.5 of 255",
+    "score_pct": 100,
+    "status": "good"
+   },
+   {
+    "name": "Bone region",
+    "detail": "Located by thresholding",
+    "score_pct": 100,
+    "status": "good"
+   }
+  ],
+  "metrics": {
+   "effective_px": 387,
+   "sharpness": 353.3,
+   "contrast": 76.5,
+   "region_detected": true
+  }
+ },
+ "uncertainty": {
+  "meniscus_mm": 0.75,
+  "bone_mm": 2.3,
+  "slope_deg": 1.7,
+  "basis": "Derived from image quality (78%) and proportional-zone segmentation."
+ },
+ "synthetic_patient_id": "SYNTH-KNEE-006",
+ "synthetic": true,
+ "examined_at": "2025-03-20T00:00:00",
+ "imaging_view": "AP standing",
+ "demo": true,
+ "analysis_run_at": "2026-11-05T02:50:44",
+ "demo_image_url": "/api/demo/images/followup_bilateral_ap_standing.png",
+ "case_role": "Follow-up examination",
+ "demo_label": "SYNTHETIC DEMONSTRATION DATA. Patient SYNTH-KNEE-006 is fictional: its age, sex and examination dates were chosen for the demo, and the two radiographs are images supplied for the demo, not verified films of one person.",
+ "demo_notes": [
+  "Both images were uploaded through the app's normal analysis path (POST /api/analyze) and each has its own stored record.",
+  "These images are not reference samples, so the meniscus, bone and implant numbers come from the platform's deterministic simulation (hash-seeded from the image bytes), not from measuring the anatomy. Image quality and the knee region are computed from the pixels.",
+  "The anatomical side (Right) was read from the images: the fibula lies to the viewer's left of the tibia and the follow-up film labels that knee R. The follow-up is a bilateral film; the pipeline picks the right knee.",
+  "A difference between the two measurement sets is a descriptive number only and says nothing about disease progression."
+ ]
+}

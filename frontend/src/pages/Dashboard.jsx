@@ -30,7 +30,10 @@ export default function Dashboard() {
           <h2 className="page-title">{t('navDashboard')}</h2>
           <p className="text-[13px] text-muted mt-1">{t('dashboardSubtitle')}</p>
         </div>
-        <Link to="/new" className="btn-primary"><Icon name="scan" size={15} />{t('navNewAnalysis')}</Link>
+        <div className="flex flex-wrap gap-3">
+          <Link to="/demo" className="btn-ghost"><Icon name="sparkle" size={15} />{t('navDemo')}</Link>
+          <Link to="/new" className="btn-primary"><Icon name="scan" size={15} />{t('navNewAnalysis')}</Link>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">

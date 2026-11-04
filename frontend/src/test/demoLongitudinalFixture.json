@@ -1,0 +1,424 @@
+{
+ "label": "SYNTHETIC DEMONSTRATION DATA. These three examinations are authored for the guided demo. They are not measurements of a real person and are never stored in any user's history. The image shown is the shipped sample OAI_sample_03 for every date.",
+ "synthetic": true,
+ "series_id": "DEMO-SERIES-001",
+ "image_url": "/api/samples/OAI_sample_03/image",
+ "timeline": {
+  "identity_basis": "Patient identity is inferred from the name and sex entered at upload within one account; the platform stores no patient ID, so identity is not independently verified.",
+  "studies": [
+   {
+    "study_id": "demo-long-1",
+    "examined_at": "2023-04-12T09:30:00",
+    "age": 56,
+    "sex": "Female",
+    "side": "Left",
+    "modality": "X-ray",
+    "image_view": null,
+    "classification": "Moderate OA",
+    "mean_thickness_mm": 3.8666666666666667,
+    "image": "OAI_sample_03.png",
+    "method": "Synthetic demonstration series (values authored for the guided demo, not measured)",
+    "synthetic": true,
+    "is_current": false,
+    "relation": "earlier",
+    "comparable_with_current": true,
+    "reasons": []
+   },
+   {
+    "study_id": "demo-long-2",
+    "examined_at": "2024-04-10T10:05:00",
+    "age": 57,
+    "sex": "Female",
+    "side": "Left",
+    "modality": "X-ray",
+    "image_view": null,
+    "classification": "Moderate OA",
+    "mean_thickness_mm": 3.733333333333333,
+    "image": "OAI_sample_03.png",
+    "method": "Synthetic demonstration series (values authored for the guided demo, not measured)",
+    "synthetic": true,
+    "is_current": false,
+    "relation": "earlier",
+    "comparable_with_current": true,
+    "reasons": []
+   },
+   {
+    "study_id": "demo-long-3",
+    "examined_at": "2025-04-15T08:50:00",
+    "age": 58,
+    "sex": "Female",
+    "side": "Left",
+    "modality": "X-ray",
+    "image_view": null,
+    "classification": "Moderate OA",
+    "mean_thickness_mm": 3.5666666666666664,
+    "image": "OAI_sample_03.png",
+    "method": "Synthetic demonstration series (values authored for the guided demo, not measured)",
+    "synthetic": true,
+    "is_current": true
+   }
+  ]
+ },
+ "comparison": {
+  "previous": {
+   "study_id": "demo-long-1",
+   "examined_at": "2023-04-12T09:30:00",
+   "age": 56,
+   "sex": "Female",
+   "side": "Left",
+   "modality": "X-ray",
+   "image_view": null,
+   "classification": "Moderate OA",
+   "mean_thickness_mm": 3.8666666666666667,
+   "image": "OAI_sample_03.png",
+   "method": "Synthetic demonstration series (values authored for the guided demo, not measured)",
+   "synthetic": true
+  },
+  "current": {
+   "study_id": "demo-long-3",
+   "examined_at": "2025-04-15T08:50:00",
+   "age": 58,
+   "sex": "Female",
+   "side": "Left",
+   "modality": "X-ray",
+   "image_view": null,
+   "classification": "Moderate OA",
+   "mean_thickness_mm": 3.5666666666666664,
+   "image": "OAI_sample_03.png",
+   "method": "Synthetic demonstration series (values authored for the guided demo, not measured)",
+   "synthetic": true
+  },
+  "identity_basis": "Patient identity is inferred from the name and sex entered at upload within one account; the platform stores no patient ID, so identity is not independently verified.",
+  "comparability": {
+   "comparable": true,
+   "blocking_reasons": [],
+   "warnings": [
+    "The imaging view is not recorded for either study, so positioning differences cannot be excluded.",
+    "Patient identity is inferred from the name and sex entered at upload within one account; the platform stores no patient ID, so identity is not independently verified."
+   ],
+   "checks": [
+    {
+     "name": "different_records",
+     "ok": true,
+     "detail": "Two distinct studies.",
+     "blocking": true
+    },
+    {
+     "name": "same_patient",
+     "ok": true,
+     "detail": "Name and sex match.",
+     "blocking": true
+    },
+    {
+     "name": "same_side",
+     "ok": true,
+     "detail": "Both studies are Left.",
+     "blocking": true
+    },
+    {
+     "name": "same_modality",
+     "ok": true,
+     "detail": "Both are X-ray.",
+     "blocking": true
+    },
+    {
+     "name": "same_measurement_method",
+     "ok": true,
+     "detail": "Measurements come from the same method.",
+     "blocking": true
+    },
+    {
+     "name": "units_compatible",
+     "ok": true,
+     "detail": "All compared measurements use the same units (mm; degrees for slope).",
+     "blocking": true
+    },
+    {
+     "name": "chronological_order",
+     "ok": true,
+     "detail": "The previous study precedes the current one.",
+     "blocking": true
+    },
+    {
+     "name": "not_duplicate_image",
+     "ok": true,
+     "detail": "Different image content.",
+     "blocking": true
+    },
+    {
+     "name": "age_consistent",
+     "ok": true,
+     "detail": "Age is consistent with the chronological order.",
+     "blocking": true
+    },
+    {
+     "name": "imaging_view_recorded",
+     "ok": false,
+     "detail": "The imaging view is not recorded for either study, so positioning differences cannot be excluded.",
+     "blocking": false
+    },
+    {
+     "name": "identity_basis",
+     "ok": false,
+     "detail": "Patient identity is inferred from the name and sex entered at upload within one account; the platform stores no patient ID, so identity is not independently verified.",
+     "blocking": false
+    }
+   ]
+  },
+  "measurements": [
+   {
+    "id": "meniscus:anterior_horn",
+    "label": "Meniscus thickness - anterior horn",
+    "unit": "mm",
+    "previous": 3.9,
+    "current": 3.6,
+    "difference": -0.2999999999999998,
+    "percentage_difference": -7.692307692307689,
+    "note": null,
+    "available": true
+   },
+   {
+    "id": "meniscus:mid_body",
+    "label": "Meniscus thickness - mid-body",
+    "unit": "mm",
+    "previous": 3.5,
+    "current": 3.2,
+    "difference": -0.2999999999999998,
+    "percentage_difference": -8.571428571428566,
+    "note": null,
+    "available": true
+   },
+   {
+    "id": "meniscus:posterior_horn",
+    "label": "Meniscus thickness - posterior horn",
+    "unit": "mm",
+    "previous": 4.2,
+    "current": 3.9,
+    "difference": -0.30000000000000027,
+    "percentage_difference": -7.1428571428571495,
+    "note": null,
+    "available": true
+   },
+   {
+    "id": "meniscus:mean",
+    "label": "Meniscus thickness - mean",
+    "unit": "mm",
+    "previous": 3.8666666666666667,
+    "current": 3.5666666666666664,
+    "difference": -0.30000000000000027,
+    "percentage_difference": -7.75862068965518,
+    "note": null,
+    "available": true
+   },
+   {
+    "id": "meniscus:min",
+    "label": "Meniscus thickness - minimum",
+    "unit": "mm",
+    "previous": 3.5,
+    "current": 3.2,
+    "difference": -0.2999999999999998,
+    "percentage_difference": -8.571428571428566,
+    "note": null,
+    "available": true
+   },
+   {
+    "id": "bone:femoral_ml_mm",
+    "label": "Femoral width (ML)",
+    "unit": "mm",
+    "previous": 65.0,
+    "current": 65.1,
+    "difference": 0.09999999999999432,
+    "percentage_difference": 0.1538461538461451,
+    "note": null,
+    "available": true
+   },
+   {
+    "id": "bone:femoral_ap_mm",
+    "label": "Femoral width (AP)",
+    "unit": "mm",
+    "previous": 56.4,
+    "current": 56.4,
+    "difference": 0.0,
+    "percentage_difference": 0.0,
+    "note": null,
+    "available": true
+   },
+   {
+    "id": "bone:tibial_ml_mm",
+    "label": "Tibial width (ML)",
+    "unit": "mm",
+    "previous": 67.1,
+    "current": 67.0,
+    "difference": -0.09999999999999432,
+    "percentage_difference": -0.1490312965722717,
+    "note": null,
+    "available": true
+   },
+   {
+    "id": "bone:tibial_ap_mm",
+    "label": "Tibial width (AP)",
+    "unit": "mm",
+    "previous": 43.2,
+    "current": 43.2,
+    "difference": 0.0,
+    "percentage_difference": 0.0,
+    "note": null,
+    "available": true
+   },
+   {
+    "id": "bone:tibial_slope_deg",
+    "label": "Tibial slope",
+    "unit": "deg",
+    "previous": 8.0,
+    "current": 8.1,
+    "difference": 0.09999999999999964,
+    "percentage_difference": 1.2499999999999956,
+    "note": null,
+    "available": true
+   }
+  ],
+  "interpretation_note": "Observed measurement difference between the selected examinations. It is a descriptive number, not a statement of disease progression or improvement."
+ },
+ "series": {
+  "measurement": {
+   "id": "meniscus:mean",
+   "label": "Meniscus thickness - mean",
+   "unit": "mm"
+  },
+  "identity_basis": "Patient identity is inferred from the name and sex entered at upload within one account; the platform stores no patient ID, so identity is not independently verified.",
+  "points": [
+   {
+    "study_id": "demo-long-1",
+    "examined_at": "2023-04-12T09:30:00",
+    "value": 3.8666666666666667,
+    "is_current": false
+   },
+   {
+    "study_id": "demo-long-2",
+    "examined_at": "2024-04-10T10:05:00",
+    "value": 3.733333333333333,
+    "is_current": false
+   },
+   {
+    "study_id": "demo-long-3",
+    "examined_at": "2025-04-15T08:50:00",
+    "value": 3.5666666666666664,
+    "is_current": true
+   }
+  ],
+  "excluded": [],
+  "trend_available": true,
+  "note": "Plotted values are the stored measurements at the actual examination dates; missing values are not interpolated and nothing is extrapolated."
+ },
+ "rejected_example": {
+  "previous": {
+   "study_id": "demo-long-3",
+   "examined_at": "2025-04-15T08:50:00",
+   "age": 58,
+   "sex": "Female",
+   "side": "Left",
+   "modality": "X-ray",
+   "image_view": null,
+   "classification": "Moderate OA",
+   "mean_thickness_mm": 3.5666666666666664,
+   "image": "OAI_sample_03.png",
+   "method": "Synthetic demonstration series (values authored for the guided demo, not measured)",
+   "synthetic": true
+  },
+  "current": {
+   "study_id": "demo-long-4",
+   "examined_at": "2025-06-01T11:00:00",
+   "age": 58,
+   "sex": "Female",
+   "side": "Right",
+   "modality": "X-ray",
+   "image_view": null,
+   "classification": "Moderate OA",
+   "mean_thickness_mm": 3.6666666666666665,
+   "image": "OAI_sample_03.png",
+   "method": "Synthetic demonstration series (values authored for the guided demo, not measured)",
+   "synthetic": true
+  },
+  "identity_basis": "Patient identity is inferred from the name and sex entered at upload within one account; the platform stores no patient ID, so identity is not independently verified.",
+  "comparability": {
+   "comparable": false,
+   "blocking_reasons": [
+    "Anatomical side differs (Left vs Right)."
+   ],
+   "warnings": [
+    "The imaging view is not recorded for either study, so positioning differences cannot be excluded.",
+    "Patient identity is inferred from the name and sex entered at upload within one account; the platform stores no patient ID, so identity is not independently verified."
+   ],
+   "checks": [
+    {
+     "name": "different_records",
+     "ok": true,
+     "detail": "Two distinct studies.",
+     "blocking": true
+    },
+    {
+     "name": "same_patient",
+     "ok": true,
+     "detail": "Name and sex match.",
+     "blocking": true
+    },
+    {
+     "name": "same_side",
+     "ok": false,
+     "detail": "Anatomical side differs (Left vs Right).",
+     "blocking": true
+    },
+    {
+     "name": "same_modality",
+     "ok": true,
+     "detail": "Both are X-ray.",
+     "blocking": true
+    },
+    {
+     "name": "same_measurement_method",
+     "ok": true,
+     "detail": "Measurements come from the same method.",
+     "blocking": true
+    },
+    {
+     "name": "units_compatible",
+     "ok": true,
+     "detail": "All compared measurements use the same units (mm; degrees for slope).",
+     "blocking": true
+    },
+    {
+     "name": "chronological_order",
+     "ok": true,
+     "detail": "The previous study precedes the current one.",
+     "blocking": true
+    },
+    {
+     "name": "not_duplicate_image",
+     "ok": true,
+     "detail": "Different image content.",
+     "blocking": true
+    },
+    {
+     "name": "age_consistent",
+     "ok": true,
+     "detail": "Age is consistent with the chronological order.",
+     "blocking": true
+    },
+    {
+     "name": "imaging_view_recorded",
+     "ok": false,
+     "detail": "The imaging view is not recorded for either study, so positioning differences cannot be excluded.",
+     "blocking": false
+    },
+    {
+     "name": "identity_basis",
+     "ok": false,
+     "detail": "Patient identity is inferred from the name and sex entered at upload within one account; the platform stores no patient ID, so identity is not independently verified.",
+     "blocking": false
+    }
+   ]
+  },
+  "measurements": [],
+  "interpretation_note": "Observed measurement difference between the selected examinations. It is a descriptive number, not a statement of disease progression or improvement."
+ }
+}

@@ -1,6 +1,8 @@
 """Upload + analysis endpoints."""
 
+import datetime
 import os
+import re
 from typing import Optional
 
 from fastapi import APIRouter, File, Form, HTTPException, UploadFile, Header, Depends
@@ -16,7 +18,12 @@ from services.seed import image_hash
 
 router = APIRouter(prefix="/api", tags=["analysis"])
 
-ALLOWED_EXT = {".jpg", ".jpeg", ".png", ".bmp", ".tif", ".tiff", ".dcm", ".dicom"}
+ALLOWED_EXT = {".jpg", ".jpeg", ".png", ".webp", ".bmp", ".tif", ".tiff", ".dcm", ".dicom"}
+
+# Optional longitudinal metadata (all three may be omitted; omitting them leaves the record exactly as before).
+PATIENT_ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.\-]{2,63}$")
+EXAM_DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+IMAGING_VIEWS = {"ap standing", "ap supine", "pa standing", "lateral", "skyline", "other"}
 MAX_BYTES = 25 * 1024 * 1024
 
 def get_current_user(authorization: str = Header(None)) -> str:
@@ -56,6 +63,31 @@ def _decode(data: bytes):
         raise HTTPException(status_code=400, detail="Could not decode the image. Try a JPEG or PNG export.")
 
 
+def _longitudinal_fields(patient_id: Optional[str], examined_date: Optional[str], view: Optional[str]) -> dict:
+    """Validate the optional longitudinal metadata. Nothing is inferred; blank values are simply not stored."""
+    out = {}
+    if patient_id and patient_id.strip():
+        pid = patient_id.strip()
+        if not PATIENT_ID_RE.match(pid):
+            raise HTTPException(status_code=400, detail="Patient ID must be 3-64 characters: letters, digits, '.', '_' or '-'.")
+        out["synthetic_patient_id"] = pid
+        out["synthetic"] = pid.upper().startswith("SYNTH-")
+    if examined_date and examined_date.strip():
+        d = examined_date.strip()
+        try:
+            parsed = datetime.date.fromisoformat(d) if EXAM_DATE_RE.match(d) else None
+        except ValueError:
+            parsed = None
+        if parsed is None or parsed > datetime.date.today():
+            raise HTTPException(status_code=400, detail="Examination date must be a past or present date as YYYY-MM-DD.")
+        out["examined_at"] = d + "T00:00:00"
+    if view and view.strip():
+        if view.strip().casefold() not in IMAGING_VIEWS:
+            raise HTTPException(status_code=400, detail="Imaging view must be one of: AP standing, AP supine, PA standing, lateral, skyline, other.")
+        out["imaging_view"] = view.strip()
+    return out
+
+
 @router.post("/analyze")
 async def analyze(
     file: UploadFile = File(...),
@@ -64,6 +96,9 @@ async def analyze(
     sex: str = Form(...),
     imaging_type: str = Form(...),
     affected_side: str = Form(...),
+    synthetic_patient_id: Optional[str] = Form(None),
+    examined_date: Optional[str] = Form(None),
+    imaging_view: Optional[str] = Form(None),
     user_id: str = Depends(get_current_user),
     token: str = Depends(get_bearer_token),
 ):
@@ -80,6 +115,8 @@ async def analyze(
         raise HTTPException(status_code=400, detail="Age must be between 1 and 120.")
     if sex not in ("Male", "Female"):
         raise HTTPException(status_code=400, detail="Sex must be 'Male' or 'Female'.")
+
+    extra = _longitudinal_fields(synthetic_patient_id, examined_date, imaging_view)
 
     img = _decode(data)
     digest = image_hash(data)
@@ -98,6 +135,7 @@ async def analyze(
         }
         record = builder.build_simulated(img, digest, file.filename, patient, img, store.IMAGE_DIR)
 
+    record.update(extra)
     db.save_analysis(user_id, token, record)
     return record
 

@@ -4,6 +4,7 @@ import { getAnalysis, sendChatMessage } from '../lib/api'
 import { useLanguage } from '../lib/LanguageContext'
 import { LANGUAGE_NAMES } from '../lib/i18n'
 import Icon from './Icon'
+import TranslatedBlock from './TranslatedBlock'
 
 /** Best-effort record context: whatever study the user is currently looking at. */
 function useCurrentRecord() {
@@ -35,6 +36,7 @@ export default function ChatWidget() {
   const [sending, setSending] = useState(false)
   const [error, setError] = useState('')
   const listRef = useRef(null)
+  const nextId = useRef(1)
   const record = useCurrentRecord()
   const { t, language } = useLanguage()
 
@@ -45,7 +47,7 @@ export default function ChatWidget() {
   const send = async () => {
     const text = input.trim()
     if (!text || sending) return
-    const next = [...messages, { role: 'user', content: text }]
+    const next = [...messages, { id: nextId.current++, role: 'user', content: text }]
     setMessages(next)
     setInput('')
     setError('')
@@ -53,8 +55,8 @@ export default function ChatWidget() {
     try {
       // Sent as the full language name (e.g. "Tamil"), not the ISO code, so the
       // model doesn't have to guess what "ta" means.
-      const { reply } = await sendChatMessage(next, record, LANGUAGE_NAMES[language])
-      setMessages([...next, { role: 'assistant', content: reply }])
+      const { reply } = await sendChatMessage(next.map(({ role, content }) => ({ role, content })), record, LANGUAGE_NAMES[language])
+      setMessages([...next, { id: nextId.current++, role: 'assistant', content: reply }])
     } catch (e) {
       setError(e.message)
     } finally {
@@ -118,15 +120,25 @@ export default function ChatWidget() {
               </div>
             )}
             <p className="text-[10px] text-muted font-display leading-snug px-1">{t('aiPrivacyNote')}</p>
-            {messages.map((m, i) => (
-              <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+            {messages.map((m) => (
+              <div key={m.id} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div
                   className={`max-w-[85%] rounded-[12px] px-3.5 py-2.5 text-[13px] font-display leading-relaxed whitespace-pre-wrap ${
                     m.role === 'user' ? 'bg-accent text-white' : 'bg-page text-navy'
                   }`}
                   style={{ border: '2px solid #2D2016' }}
                 >
-                  {m.content}
+                  {m.role === 'assistant' ? (
+                    <TranslatedBlock
+                      source={m.content}
+                      studyId={record?.analysis_id}
+                      feature={`chat:${m.id}`}
+                      contentType="chat_message"
+                      as="div"
+                    />
+                  ) : (
+                    m.content
+                  )}
                 </div>
               </div>
             ))}

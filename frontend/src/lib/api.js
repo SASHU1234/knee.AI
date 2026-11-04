@@ -18,7 +18,9 @@ async function handle(res) {
       const body = await res.json()
       if (body.detail) detail = typeof body.detail === 'string' ? body.detail : JSON.stringify(body.detail)
     } catch (_) { /* non-JSON error body */ }
-    throw new Error(detail)
+    const err = new Error(detail)
+    err.status = res.status // 422 = translation rejected by the safety checks
+    throw err
   }
   return res.json()
 }
@@ -31,6 +33,10 @@ export function analyze(file, patient) {
   form.append('sex', patient.sex)
   form.append('imaging_type', patient.imaging_type)
   form.append('affected_side', patient.affected_side)
+  // optional longitudinal metadata: only sent when the user filled it in
+  if (patient.synthetic_patient_id) form.append('synthetic_patient_id', patient.synthetic_patient_id)
+  if (patient.examined_date) form.append('examined_date', patient.examined_date)
+  if (patient.imaging_view) form.append('imaging_view', patient.imaging_view)
   return fetchWithAuth(`${BASE}/analyze`, { method: 'POST', body: form }).then(handle)
 }
 
@@ -87,6 +93,15 @@ export const updateAdvice = async (id, adviceText) => {
 }
 
 /**
+ * AI text is always generated in English, whatever the website language is.
+ * Display language is handled afterwards by local translation (see
+ * translateText / useTranslatedText) so switching language never costs an
+ * OpenRouter request. The `language` params below are kept for call-site
+ * compatibility but deliberately ignored.
+ */
+const GENERATION_LANGUAGE = 'English'
+
+/**
  * One turn of the floating assistant chat. `messages` is the full history so
  * far; `language` is the full English name of the reply language (e.g.
  * "Tamil"), omitted for English so the request stays identical to before
@@ -98,7 +113,7 @@ export const sendChatMessage = (messages, record, language) =>
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       messages, record: record || undefined,
-      language: language && language !== 'English' ? language : undefined,
+      language: GENERATION_LANGUAGE,
     }),
   }).then(handle)
 
@@ -108,7 +123,8 @@ export const getFoodAdvice = (record, language) =>
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       record,
-      language: language && language !== 'English' ? language : undefined,
+      language: GENERATION_LANGUAGE,
+      include_provenance: true,
     }),
   }).then(handle)
 
@@ -123,7 +139,8 @@ export const getVisionObservations = (filename, record, language) =>
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       filename, record,
-      language: language && language !== 'English' ? language : undefined,
+      language: GENERATION_LANGUAGE,
+      include_provenance: true,
     }),
   }).then(handle)
 
@@ -201,3 +218,44 @@ export function variantKey(toggles) {
   const active = ['femur', 'meniscus', 'tibia'].filter((s) => toggles[s]).sort()
   return active.length ? active.join('-') : 'none'
 }
+
+/** Local (on-server) machine translation of existing English AI text. */
+export const translateText = (text, targetLanguage, contentType, signal) =>
+  fetchWithAuth(`${BASE}/translate`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text, target_language: targetLanguage, content_type: contentType }),
+    signal,
+  }).then(handle)
+
+/** Cheap (no model) status call: availability and the server's translation-pipeline version. */
+export const getTranslateStatus = () => fetchWithAuth(`${BASE}/translate/status`).then(handle)
+
+// ---- Evidence & provenance, longitudinal comparison, clinician review, guided demo -------------
+const jsonPost = (url, body) =>
+  fetchWithAuth(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).then(handle)
+
+/** aiItems: [{ provenance, text }] - signed blocks the server issued for this session's AI text. */
+export const getProvenance = (studyId, aiItems = []) =>
+  aiItems.length
+    ? jsonPost(`${BASE}/provenance/${studyId}`, { ai_items: aiItems.map(({ provenance, text }) => ({ provenance, text })) })
+    : fetchWithAuth(`${BASE}/provenance/${studyId}`).then(handle)
+
+export const getComparisonCandidates = (studyId) => fetchWithAuth(`${BASE}/longitudinal/${studyId}/candidates`).then(handle)
+export const compareStudies = (previousId, currentId) =>
+  jsonPost(`${BASE}/longitudinal/compare`, { previous_id: previousId, current_id: currentId })
+export const getMeasurementSeries = (studyId, measurement) =>
+  fetchWithAuth(`${BASE}/longitudinal/${studyId}/series?measurement=${encodeURIComponent(measurement)}`).then(handle)
+
+export const listReviews = (studyId) => fetchWithAuth(`${BASE}/reviews/${studyId}`).then(handle)
+/** The reviewer is never sent: the server derives it from the session token. */
+export const submitReview = (payload) => jsonPost(`${BASE}/reviews`, payload)
+
+export const listDemoCases = () => fetchWithAuth(`${BASE}/demo/cases`).then(handle)
+export const getDemoCase = (source) => fetchWithAuth(`${BASE}/demo/cases/${source}`).then(handle)
+export const getDemoCaseProvenance = (source) => fetchWithAuth(`${BASE}/demo/cases/${source}/provenance`).then(handle)
+export const getDemoCachedAi = (source) => fetchWithAuth(`${BASE}/demo/cases/${source}/cached-ai`).then(handle)
+export const getDemoLongitudinal = (seriesId) =>
+  fetchWithAuth(`${BASE}/demo/longitudinal${seriesId ? `?series_id=${encodeURIComponent(seriesId)}` : ''}`).then(handle)
+export const listDemoSeries = () => fetchWithAuth(`${BASE}/demo/longitudinal/series`).then(handle)
+

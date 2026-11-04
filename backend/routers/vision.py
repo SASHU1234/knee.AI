@@ -19,6 +19,7 @@ from pydantic import BaseModel
 import store
 from routers.analysis import get_current_user
 from services import openrouter_client as orc
+from services import provenance_service as prov
 from services import supabase_client as db
 
 router = APIRouter(prefix="/api", tags=["vision"])
@@ -44,6 +45,7 @@ class VisionRequest(BaseModel):
     filename: str  # the original ("none" variant) image filename
     record: Optional[dict] = None
     language: Optional[str] = None
+    include_provenance: bool = False  # opt-in: default response is unchanged
 
 
 # OpenRouter image inputs accept only these four types; anything else stored
@@ -138,4 +140,12 @@ def analyze_image_visually(req: VisionRequest, user_id: str = Depends(get_curren
     except orc.OpenRouterError as e:
         raise HTTPException(status_code=502, detail=str(e))
 
-    return {"observations": orc.strip_markdown(observations)}
+    text = orc.strip_markdown(observations)
+    if not req.include_provenance:
+        return {"observations": text}
+    # Opt-in: server-signed lineage of this generation (no text, no prompt, no image data).
+    study_id = (req.record or {}).get("analysis_id")
+    return {
+        "observations": text,
+        "provenance": prov.ai_provenance("visual_scan", text, study_id, "OpenRouter", orc.vision_model(), req.filename),
+    }

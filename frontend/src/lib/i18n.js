@@ -356,6 +356,10 @@ const en = {
   generatingReport: 'Generating...',
   clinicianNote: "Doctor's Advice",
   aiGenerated: 'AI Generated',
+  translating: 'Translating…',
+  machineTranslatedNote: 'Machine-translated from the English original. Not a clinically validated translation; the English text is the source of truth.',
+  translationUnavailable: 'Translation is unavailable right now. Showing the English original.',
+  translationRejected: 'This translation could not be verified, so the English original is shown.',
   foodDietAdvice: 'Food & Diet Advice',
   reviewRecommended: 'Clinical review recommended',
   tabMeniscusOa: 'Meniscus & OA Analysis',
@@ -699,6 +703,10 @@ const hi = {
   generatingReport: 'बन रही है...',
   clinicianNote: 'चिकित्सक की सलाह',
   aiGenerated: 'AI द्वारा जनित',
+  translating: 'अनुवाद हो रहा है…',
+  machineTranslatedNote: 'अंग्रेज़ी मूल पाठ का मशीन-अनुवाद। यह चिकित्सकीय रूप से सत्यापित अनुवाद नहीं है; अंग्रेज़ी पाठ ही मूल स्रोत है।',
+  translationUnavailable: 'अनुवाद अभी उपलब्ध नहीं है। अंग्रेज़ी मूल पाठ दिखाया जा रहा है।',
+  translationRejected: 'इस अनुवाद की पुष्टि नहीं हो सकी, इसलिए अंग्रेज़ी मूल पाठ दिखाया जा रहा है।',
   foodDietAdvice: 'आहार सलाह',
   reviewRecommended: 'क्लिनिकल समीक्षा की सिफारिश',
   tabMeniscusOa: 'मेनिस्कस और OA विश्लेषण',
@@ -1042,6 +1050,10 @@ const ta = {
   generatingReport: 'உருவாக்குகிறது...',
   clinicianNote: 'மருத்துவரின் ஆலோசனை',
   aiGenerated: 'AI உருவாக்கியது',
+  translating: 'மொழிபெயர்க்கப்படுகிறது…',
+  machineTranslatedNote: 'ஆங்கில மூல உரையின் இயந்திர மொழிபெயர்ப்பு. இது மருத்துவ ரீதியாக சரிபார்க்கப்பட்ட மொழிபெயர்ப்பு அல்ல; ஆங்கில உரையே மூலம்.',
+  translationUnavailable: 'மொழிபெயர்ப்பு தற்போது கிடைக்கவில்லை. ஆங்கில மூல உரை காட்டப்படுகிறது.',
+  translationRejected: 'இந்த மொழிபெயர்ப்பை உறுதிப்படுத்த முடியவில்லை, எனவே ஆங்கில மூல உரை காட்டப்படுகிறது.',
   foodDietAdvice: 'உணவு ஆலோசனை',
   reviewRecommended: 'மருத்துவ மறுஆய்வு பரிந்துரைக்கப்படுகிறது',
   tabMeniscusOa: 'மெனிஸ்கஸ் & OA பகுப்பாய்வு',
@@ -1385,6 +1397,10 @@ const ml = {
   generatingReport: 'സൃഷ്ടിക്കുന്നു...',
   clinicianNote: 'ഡോക്ടറുടെ ഉപദേശം',
   aiGenerated: 'AI സൃഷ്ടിച്ചത്',
+  translating: 'വിവർത്തനം ചെയ്യുന്നു…',
+  machineTranslatedNote: 'ഇംഗ്ലീഷ് മൂലരൂപത്തിന്റെ മെഷീൻ വിവർത്തനം. ഇത് ക്ലിനിക്കലായി സ്ഥിരീകരിച്ച വിവർത്തനമല്ല; ഇംഗ്ലീഷ് പാഠമാണ് അടിസ്ഥാനം.',
+  translationUnavailable: 'വിവർത്തനം ഇപ്പോൾ ലഭ്യമല്ല. ഇംഗ്ലീഷ് മൂലരൂപം കാണിക്കുന്നു.',
+  translationRejected: 'ഈ വിവർത്തനം സ്ഥിരീകരിക്കാൻ കഴിഞ്ഞില്ല, അതിനാൽ ഇംഗ്ലീഷ് മൂലരൂപം കാണിക്കുന്നു.',
   foodDietAdvice: 'ഭക്ഷണ ഉപദേശം',
   reviewRecommended: 'ക്ലിനിക്കൽ അവലോകനം ശുപാർശ ചെയ്യുന്നു',
   tabMeniscusOa: 'മെനിസ്‌കസ് & OA വിശകലനം',
@@ -1728,6 +1744,10 @@ const te = {
   generatingReport: 'సృష్టిస్తోంది...',
   clinicianNote: 'వైద్యుని సలహా',
   aiGenerated: 'AI రూపొందించింది',
+  translating: 'అనువదిస్తోంది…',
+  machineTranslatedNote: 'ఇంగ్లీష్ మూల పాఠం యొక్క మెషిన్ అనువాదం. ఇది వైద్యపరంగా ధృవీకరించిన అనువాదం కాదు; ఇంగ్లీష్ పాఠమే మూలం.',
+  translationUnavailable: 'అనువాదం ప్రస్తుతం అందుబాటులో లేదు. ఇంగ్లీష్ మూల పాఠం చూపిస్తోంది.',
+  translationRejected: 'ఈ అనువాదాన్ని ధృవీకరించలేకపోయాం, కాబట్టి ఇంగ్లీష్ మూల పాఠం చూపిస్తోంది.',
   foodDietAdvice: 'ఆహార సలహా',
   reviewRecommended: 'క్లినికల్ సమీక్ష సిఫార్సు చేయబడింది',
   tabMeniscusOa: 'మెనిస్కస్ & OA విశ్లేషణ',
@@ -1744,4 +1764,13 @@ const te = {
   send: 'పంపండి',
 }
 
-export const DICTIONARIES = { en, hi, ta, ml, te }
+import * as workflow from './i18nWorkflow'
+import * as about from './i18nAbout'
+
+export const DICTIONARIES = {
+  en: { ...en, ...workflow.EN, ...about.EN },
+  hi: { ...hi, ...workflow.HI, ...about.HI },
+  ta: { ...ta, ...workflow.TA, ...about.TA },
+  ml: { ...ml, ...workflow.ML, ...about.ML },
+  te: { ...te, ...workflow.TE, ...about.TE },
+}

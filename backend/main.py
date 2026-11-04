@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 import store
-from routers import advice, analysis, chat, report, research, vision
+from routers import advice, analysis, chat, demo, longitudinal, provenance, report, research, reviews, translate, vision
 
 app = FastAPI(
     title="AI-Assisted Knee Analysis Platform",
@@ -43,6 +43,11 @@ app.include_router(advice.router)
 app.include_router(chat.router)
 app.include_router(research.router)
 app.include_router(vision.router)
+app.include_router(translate.router)
+app.include_router(provenance.router)
+app.include_router(longitudinal.router)
+app.include_router(reviews.router)
+app.include_router(demo.router)
 
 
 @app.on_event("startup")

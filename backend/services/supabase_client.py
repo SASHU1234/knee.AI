@@ -134,6 +134,27 @@ def list_analyses(user_id: str, token: str) -> list:
     # Return the inner records
     return [item.get("record") for item in response.data]
 
+def list_analyses_for_patient(user_id: str, token: str, patient_name: str, limit: int = 50) -> list:
+    """Records of ONE user with the given patient name (server-side filter, bounded)."""
+    client = _client_for(token)
+    if not client or not patient_name:
+        return []
+    response = (client.table("analyses").select("record").eq("user_id", user_id)
+                .eq("patient_name", patient_name).order("created_at", desc=True).limit(max(1, min(limit, 100))).execute())
+    return [item.get("record") for item in response.data if item.get("record")]
+
+
+def list_analyses_by_patient_id(user_id: str, token: str, synthetic_patient_id: str, limit: int = 50) -> list:
+    """Records of ONE user carrying the given explicit patient ID (bounded JSON-field filter)."""
+    client = _client_for(token)
+    if not client or not synthetic_patient_id:
+        return []
+    response = (client.table("analyses").select("record").eq("user_id", user_id)
+                .filter("record->>synthetic_patient_id", "eq", synthetic_patient_id)
+                .order("created_at", desc=True).limit(max(1, min(limit, 100))).execute())
+    return [item.get("record") for item in response.data if item.get("record")]
+
+
 def get_analysis(user_id: str, token: str, analysis_id: str) -> dict:
     client = _client_for(token)
     if not client:

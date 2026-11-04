@@ -11,3 +11,4 @@ backend/storage/analyses.json
 .env.*
 !.env.example
 !frontend/.env.production
+backend/.models/

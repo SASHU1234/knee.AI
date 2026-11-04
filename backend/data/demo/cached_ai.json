@@ -1,0 +1,36 @@
+{
+ "fixture_version": "demo-fixture-1",
+ "generated_by": "Pre-written synthetic demonstration text authored for the guided demo. It is NOT model output and is never shown as live inference.",
+ "cases": {
+  "OAI_sample_01": {
+   "source_md5": "bf020fbe0c461d65e54f6190b13eab75",
+   "analysis_backbone": "nnU-Net v2 (3d_fullres) + MedSAM refinement",
+   "visual_scan": "Knee radiograph of the left knee with the distal femur and proximal tibia in the field of view and the joint line included. Medial meniscus thickness reported by the reference analysis for this case ranges from 5.4 to 6.1 mm.\n- Image positioning and coverage of the joint appear adequate for review.\n- Compartment-level joint-space detail should be checked directly on the image.\nThese are visual observations, not a diagnosis.",
+   "food_advice": "Pre-written demonstration guidance for a 45 year old female with a reference classification of Normal (KL grade 0).\n\n- Favour anti-inflammatory foods such as oily fish, leafy greens, berries and nuts.\n- Limit sugary drinks and heavily fried food.\n- Keep well hydrated.\n\nThis is general guidance, not a substitute for a clinician or a registered dietitian."
+  },
+  "OAI_sample_02": {
+   "source_md5": "1be510294a0d0ed1ebd85e96680f8b52",
+   "analysis_backbone": "nnU-Net v2 (3d_fullres) + MedSAM refinement",
+   "visual_scan": "Knee radiograph of the right knee with the distal femur and proximal tibia in the field of view and the joint line included. Medial meniscus thickness reported by the reference analysis for this case ranges from 4.5 to 5.2 mm.\n- Image positioning and coverage of the joint appear adequate for review.\n- Compartment-level joint-space detail should be checked directly on the image.\nThese are visual observations, not a diagnosis.",
+   "food_advice": "Pre-written demonstration guidance for a 52 year old male with a reference classification of Mild OA (KL grade 1).\n\n- Favour anti-inflammatory foods such as oily fish, leafy greens, berries and nuts.\n- Limit sugary drinks and heavily fried food.\n- Keep well hydrated.\n\nThis is general guidance, not a substitute for a clinician or a registered dietitian."
+  },
+  "OAI_sample_03": {
+   "source_md5": "5198e3cd2be7c7d6ff3e4348de26979d",
+   "analysis_backbone": "nnU-Net v2 (3d_fullres) + MedSAM refinement",
+   "visual_scan": "Knee radiograph of the left knee with the distal femur and proximal tibia in the field of view and the joint line included. Medial meniscus thickness reported by the reference analysis for this case ranges from 3.2 to 3.9 mm.\n- Image positioning and coverage of the joint appear adequate for review.\n- Compartment-level joint-space detail should be checked directly on the image.\nThese are visual observations, not a diagnosis.",
+   "food_advice": "Pre-written demonstration guidance for a 58 year old female with a reference classification of Moderate OA (KL grade 2).\n\n- Favour anti-inflammatory foods such as oily fish, leafy greens, berries and nuts.\n- Limit sugary drinks and heavily fried food.\n- Keep well hydrated.\n\nThis is general guidance, not a substitute for a clinician or a registered dietitian."
+  },
+  "OAI_sample_04": {
+   "source_md5": "165b2c29c3c0a8333bae36ba42c6fa09",
+   "analysis_backbone": "nnU-Net v2 (3d_fullres) + MedSAM refinement",
+   "visual_scan": "Knee radiograph of the right knee with the distal femur and proximal tibia in the field of view and the joint line included. Medial meniscus thickness reported by the reference analysis for this case ranges from 2.7 to 3.2 mm.\n- Image positioning and coverage of the joint appear adequate for review.\n- Compartment-level joint-space detail should be checked directly on the image.\nThese are visual observations, not a diagnosis.",
+   "food_advice": "Pre-written demonstration guidance for a 66 year old male with a reference classification of Severe OA (KL grade 3).\n\n- Favour anti-inflammatory foods such as oily fish, leafy greens, berries and nuts.\n- Limit sugary drinks and heavily fried food.\n- Keep well hydrated.\n\nThis is general guidance, not a substitute for a clinician or a registered dietitian."
+  },
+  "OAI_sample_05": {
+   "source_md5": "9da97cc517b3952a490fb8ea94fd285c",
+   "analysis_backbone": "nnU-Net v2 (3d_fullres) + MedSAM refinement",
+   "visual_scan": "Knee radiograph of the left knee with the distal femur and proximal tibia in the field of view and the joint line included. Medial meniscus thickness reported by the reference analysis for this case ranges from 2.5 to 2.9 mm.\n- Image positioning and coverage of the joint appear adequate for review.\n- Compartment-level joint-space detail should be checked directly on the image.\nThese are visual observations, not a diagnosis.",
+   "food_advice": "Pre-written demonstration guidance for a 72 year old female with a reference classification of Severe OA (KL grade 4).\n\n- Favour anti-inflammatory foods such as oily fish, leafy greens, berries and nuts.\n- Limit sugary drinks and heavily fried food.\n- Keep well hydrated.\n\nThis is general guidance, not a substitute for a clinician or a registered dietitian."
+  }
+ }
+}

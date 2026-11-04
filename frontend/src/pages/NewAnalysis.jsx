@@ -5,7 +5,7 @@ import { useLanguage } from '../lib/LanguageContext'
 import { Card, Disclaimer, ErrorNote, Spinner } from '../components/ui'
 import Icon, { IconChip } from '../components/Icon'
 
-const ACCEPT = '.jpg,.jpeg,.png,.bmp,.tif,.tiff,.dcm,.dicom'
+const ACCEPT = '.jpg,.jpeg,.png,.webp,.bmp,.tif,.tiff,.dcm,.dicom'
 
 const EMPTY = {
   name: '',
@@ -13,6 +13,10 @@ const EMPTY = {
   sex: 'Female',
   imaging_type: 'X-ray',
   affected_side: 'Left',
+  // optional longitudinal details: omitted from the request when blank
+  synthetic_patient_id: '',
+  examined_date: '',
+  imaging_view: '',
 }
 
 export default function NewAnalysis() {
@@ -275,6 +279,33 @@ export default function NewAnalysis() {
                 </select>
               </div>
             </div>
+
+            <details className="rounded-[10px] bg-page px-3.5 py-2.5" style={{ border: '2px solid #2D2016' }}>
+              <summary className="text-[12px] font-display font-semibold text-navy cursor-pointer">{t('uploadLongitudinal')}</summary>
+              <p className="text-[11px] text-muted font-display mt-2">{t('uploadLongitudinalHint')}</p>
+              <div className="grid sm:grid-cols-3 gap-3 mt-3">
+                <div>
+                  <label className="label" htmlFor="pid">{t('uploadPatientId')}</label>
+                  <input id="pid" className="input" placeholder="SYNTH-KNEE-006" value={form.synthetic_patient_id} onChange={set('synthetic_patient_id')} maxLength={64} />
+                </div>
+                <div>
+                  <label className="label" htmlFor="exam">{t('uploadExamDate')}</label>
+                  <input id="exam" type="date" className="input" max={new Date().toISOString().slice(0, 10)} value={form.examined_date} onChange={set('examined_date')} />
+                </div>
+                <div>
+                  <label className="label" htmlFor="view">{t('uploadView')}</label>
+                  <select id="view" className="input" value={form.imaging_view} onChange={set('imaging_view')}>
+                    <option value="">-</option>
+                    <option>AP standing</option>
+                    <option>AP supine</option>
+                    <option>PA standing</option>
+                    <option>lateral</option>
+                    <option>skyline</option>
+                    <option>other</option>
+                  </select>
+                </div>
+              </div>
+            </details>
 
             <ErrorNote>{error}</ErrorNote>
 

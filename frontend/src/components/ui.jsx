@@ -2,9 +2,9 @@ import { Link } from 'react-router-dom'
 import { useLanguage } from '../lib/LanguageContext'
 import Icon, { IconChip } from './Icon'
 
-export function Card({ title, eyebrow, icon, tone = 'slate', action, children, className = '', bodyClass = 'card-pad' }) {
+export function Card({ title, eyebrow, icon, tone = 'slate', action, children, className = '', bodyClass = 'card-pad', id }) {
   return (
-    <section className={`card ${className}`}>
+    <section id={id} className={`card ${className}`}>
       {(title || action) && (
         <div className="card-head">
           <div className="flex items-center gap-3 min-w-0">

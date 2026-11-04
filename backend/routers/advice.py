@@ -7,6 +7,7 @@ from pydantic import BaseModel
 
 from routers.analysis import get_current_user
 from services import openrouter_client as orc
+from services import provenance_service as prov
 
 router = APIRouter(prefix="/api", tags=["advice"])
 
@@ -14,6 +15,7 @@ router = APIRouter(prefix="/api", tags=["advice"])
 class AdviceRequest(BaseModel):
     record: dict
     language: Optional[str] = None
+    include_provenance: bool = False  # opt-in: default response is unchanged
 
 
 def _build_messages(record: dict, language: Optional[str] = None) -> list:
@@ -53,4 +55,11 @@ def get_food_advice(req: AdviceRequest, user_id: str = Depends(get_current_user)
         advice = orc.chat(messages, model=orc.advice_model(), max_tokens=orc.ADVICE_MAX_TOKENS)
     except orc.OpenRouterError as e:
         raise HTTPException(status_code=502, detail=str(e))
-    return {"advice": orc.strip_markdown(advice)}
+    text = orc.strip_markdown(advice)
+    if not req.include_provenance:
+        return {"advice": text}
+    # Opt-in: server-signed lineage of this generation (no text, no prompt).
+    return {
+        "advice": text,
+        "provenance": prov.ai_provenance("food_advice", text, req.record.get("analysis_id"), "OpenRouter", orc.advice_model()),
+    }

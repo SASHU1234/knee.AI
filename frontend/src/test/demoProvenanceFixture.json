@@ -1,0 +1,342 @@
+{
+ "study_id": "7b0b01469e43",
+ "study": {
+  "study_id": "7b0b01469e43",
+  "modality": "X-ray",
+  "laterality": "Left",
+  "age": 58,
+  "sex": "Female",
+  "analysis_timestamp": "2026-11-05T02:25:32",
+  "source_filename": "OAI_sample_03.png",
+  "image_hash_prefix": "68fe61c818a4ff2f",
+  "image_size_px": [
+   1024,
+   1024
+  ],
+  "image_view": null
+ },
+ "origin": {
+  "type": "reference_case_sidecar",
+  "label": "Pre-analysed reference case",
+  "algorithm": "nnU-Net v2 (3d_fullres) + MedSAM refinement",
+  "segmentation": "Per-pixel polygons from the model output.",
+  "input": "OAI_sample_03",
+  "scale_px_per_mm": 5.2,
+  "note": "Values are read from the JSON sidecar shipped with the platform; they were not computed when this study was opened."
+ },
+ "provenance": [
+  {
+   "finding_id": "meniscus:anterior_horn",
+   "category": "quantitative_measurement",
+   "title": "Medial meniscus thickness - Anterior Horn",
+   "source": {
+    "type": "quantitative_analysis",
+    "origin": "reference_case_sidecar",
+    "algorithm": "nnU-Net v2 (3d_fullres) + MedSAM refinement",
+    "segmentation": "Per-pixel polygons from the model output.",
+    "input": "OAI_sample_03"
+   },
+   "generated_at": "2026-11-05T02:25:32",
+   "study_id": "7b0b01469e43",
+   "section": "meniscus-measurements",
+   "limitations": [
+    "Values are read from the JSON sidecar shipped with the platform; they were not computed when this study was opened."
+   ],
+   "available": true,
+   "value": 3.6,
+   "unit": "mm",
+   "side": "Left"
+  },
+  {
+   "finding_id": "meniscus:mid_body",
+   "category": "quantitative_measurement",
+   "title": "Medial meniscus thickness - Mid-Body",
+   "source": {
+    "type": "quantitative_analysis",
+    "origin": "reference_case_sidecar",
+    "algorithm": "nnU-Net v2 (3d_fullres) + MedSAM refinement",
+    "segmentation": "Per-pixel polygons from the model output.",
+    "input": "OAI_sample_03"
+   },
+   "generated_at": "2026-11-05T02:25:32",
+   "study_id": "7b0b01469e43",
+   "section": "meniscus-measurements",
+   "limitations": [
+    "Values are read from the JSON sidecar shipped with the platform; they were not computed when this study was opened."
+   ],
+   "available": true,
+   "value": 3.2,
+   "unit": "mm",
+   "side": "Left"
+  },
+  {
+   "finding_id": "meniscus:posterior_horn",
+   "category": "quantitative_measurement",
+   "title": "Medial meniscus thickness - Posterior Horn",
+   "source": {
+    "type": "quantitative_analysis",
+    "origin": "reference_case_sidecar",
+    "algorithm": "nnU-Net v2 (3d_fullres) + MedSAM refinement",
+    "segmentation": "Per-pixel polygons from the model output.",
+    "input": "OAI_sample_03"
+   },
+   "generated_at": "2026-11-05T02:25:32",
+   "study_id": "7b0b01469e43",
+   "section": "meniscus-measurements",
+   "limitations": [
+    "Values are read from the JSON sidecar shipped with the platform; they were not computed when this study was opened."
+   ],
+   "available": true,
+   "value": 3.9,
+   "unit": "mm",
+   "side": "Left"
+  },
+  {
+   "finding_id": "meniscus:mean",
+   "category": "quantitative_measurement",
+   "title": "Mean medial meniscus thickness",
+   "source": {
+    "type": "derived_from_measurements",
+    "origin": "reference_case_sidecar",
+    "algorithm": "nnU-Net v2 (3d_fullres) + MedSAM refinement",
+    "segmentation": "Per-pixel polygons from the model output.",
+    "input": "OAI_sample_03",
+    "method": "arithmetic mean of the stored location thicknesses"
+   },
+   "generated_at": "2026-11-05T02:25:32",
+   "study_id": "7b0b01469e43",
+   "section": "meniscus-measurements",
+   "limitations": [
+    "Derived value; precision follows the underlying measurements"
+   ],
+   "available": true,
+   "value": 3.57,
+   "unit": "mm",
+   "side": "Left"
+  },
+  {
+   "finding_id": "oa:classification",
+   "category": "rule_based_classification",
+   "title": "OA classification (rule-based)",
+   "source": {
+    "type": "rule_based_classifier",
+    "algorithm": "age/sex-adjusted thickness thresholds (oa_classifier)",
+    "thresholds_mm": {
+     "severe": 2.35,
+     "moderate": 3.35,
+     "mild": 4.35
+    },
+    "age_escalated": false,
+    "input": "mean meniscus thickness"
+   },
+   "generated_at": "2026-11-05T02:25:32",
+   "study_id": "7b0b01469e43",
+   "section": "meniscus-measurements",
+   "limitations": [
+    "Threshold rule applied to the measurement above; not a clinical diagnosis",
+    "Requires independent clinical review"
+   ],
+   "available": true,
+   "value": "Moderate OA"
+  },
+  {
+   "finding_id": "oa:kl_grade",
+   "category": "model_or_heuristic_grade",
+   "title": "Kellgren-Lawrence grade (estimated)",
+   "source": {
+    "type": "reference_case_sidecar",
+    "algorithm": "read from the sidecar"
+   },
+   "generated_at": "2026-11-05T02:25:32",
+   "study_id": "7b0b01469e43",
+   "section": "meniscus-measurements",
+   "limitations": [
+    "Estimated grade; confirm on the image"
+   ],
+   "available": true,
+   "value": 2
+  },
+  {
+   "finding_id": "bone:femoral_ml_mm",
+   "category": "quantitative_measurement",
+   "title": "Femoral width (ML)",
+   "source": {
+    "type": "quantitative_analysis",
+    "origin": "reference_case_sidecar",
+    "algorithm": "nnU-Net v2 (3d_fullres) + MedSAM refinement",
+    "segmentation": "Per-pixel polygons from the model output.",
+    "input": "OAI_sample_03"
+   },
+   "generated_at": "2026-11-05T02:25:32",
+   "study_id": "7b0b01469e43",
+   "section": "implant-sizing",
+   "limitations": [
+    "Values are read from the JSON sidecar shipped with the platform; they were not computed when this study was opened."
+   ],
+   "available": true,
+   "value": 65.1,
+   "unit": "mm",
+   "side": "Left"
+  },
+  {
+   "finding_id": "bone:femoral_ap_mm",
+   "category": "quantitative_measurement",
+   "title": "Femoral width (AP)",
+   "source": {
+    "type": "quantitative_analysis",
+    "origin": "reference_case_sidecar",
+    "algorithm": "nnU-Net v2 (3d_fullres) + MedSAM refinement",
+    "segmentation": "Per-pixel polygons from the model output.",
+    "input": "OAI_sample_03"
+   },
+   "generated_at": "2026-11-05T02:25:32",
+   "study_id": "7b0b01469e43",
+   "section": "implant-sizing",
+   "limitations": [
+    "Values are read from the JSON sidecar shipped with the platform; they were not computed when this study was opened."
+   ],
+   "available": true,
+   "value": 56.4,
+   "unit": "mm",
+   "side": "Left"
+  },
+  {
+   "finding_id": "bone:tibial_ml_mm",
+   "category": "quantitative_measurement",
+   "title": "Tibial width (ML)",
+   "source": {
+    "type": "quantitative_analysis",
+    "origin": "reference_case_sidecar",
+    "algorithm": "nnU-Net v2 (3d_fullres) + MedSAM refinement",
+    "segmentation": "Per-pixel polygons from the model output.",
+    "input": "OAI_sample_03"
+   },
+   "generated_at": "2026-11-05T02:25:32",
+   "study_id": "7b0b01469e43",
+   "section": "implant-sizing",
+   "limitations": [
+    "Values are read from the JSON sidecar shipped with the platform; they were not computed when this study was opened."
+   ],
+   "available": true,
+   "value": 67.0,
+   "unit": "mm",
+   "side": "Left"
+  },
+  {
+   "finding_id": "bone:tibial_ap_mm",
+   "category": "quantitative_measurement",
+   "title": "Tibial width (AP)",
+   "source": {
+    "type": "quantitative_analysis",
+    "origin": "reference_case_sidecar",
+    "algorithm": "nnU-Net v2 (3d_fullres) + MedSAM refinement",
+    "segmentation": "Per-pixel polygons from the model output.",
+    "input": "OAI_sample_03"
+   },
+   "generated_at": "2026-11-05T02:25:32",
+   "study_id": "7b0b01469e43",
+   "section": "implant-sizing",
+   "limitations": [
+    "Values are read from the JSON sidecar shipped with the platform; they were not computed when this study was opened."
+   ],
+   "available": true,
+   "value": 43.2,
+   "unit": "mm",
+   "side": "Left"
+  },
+  {
+   "finding_id": "bone:tibial_slope_deg",
+   "category": "quantitative_measurement",
+   "title": "Tibial slope",
+   "source": {
+    "type": "quantitative_analysis",
+    "origin": "reference_case_sidecar",
+    "algorithm": "nnU-Net v2 (3d_fullres) + MedSAM refinement",
+    "segmentation": "Per-pixel polygons from the model output.",
+    "input": "OAI_sample_03"
+   },
+   "generated_at": "2026-11-05T02:25:32",
+   "study_id": "7b0b01469e43",
+   "section": "implant-sizing",
+   "limitations": [
+    "Values are read from the JSON sidecar shipped with the platform; they were not computed when this study was opened."
+   ],
+   "available": true,
+   "value": 8.1,
+   "unit": "deg",
+   "side": "Left"
+  },
+  {
+   "finding_id": "implant:primary",
+   "category": "implant_sizing",
+   "title": "Implant size recommendation",
+   "source": {
+    "type": "catalogue_matching",
+    "algorithm": "size pick read from the sidecar and cross-checked against catalogue centroids",
+    "input": "stored bone measurements"
+   },
+   "generated_at": "2026-11-05T02:25:32",
+   "study_id": "7b0b01469e43",
+   "section": "implant-sizing",
+   "limitations": [
+    "Dimensional match only; no biomechanical or fit validation is performed",
+    "'Match' percentage is a distance-to-centroid mapping, not a probability"
+   ],
+   "available": true,
+   "value": "SIGMA Fixed Bearing Knee M (DePuy Synthes)",
+   "match_pct": 89.9,
+   "match_pct_meaning": "distance-to-centroid mapping"
+  },
+  {
+   "finding_id": "quality:overall",
+   "category": "image_quality",
+   "title": "Image-quality assessment",
+   "source": {
+    "type": "image_heuristics",
+    "algorithm": "sharpness / contrast / resolution / region-detection heuristics (quality.py)",
+    "input": "uploaded image"
+   },
+   "generated_at": "2026-11-05T02:25:32",
+   "study_id": "7b0b01469e43",
+   "section": "image-quality",
+   "limitations": [
+    "Heuristic computed from the film; not a model posterior"
+   ],
+   "available": true,
+   "value": 85
+  }
+ ],
+ "unavailable": [
+  {
+   "field": "image_view",
+   "reason": "The imaging view (e.g. AP/lateral) is not recorded by the platform."
+  },
+  {
+   "field": "algorithm_version",
+   "reason": "Only a method description is recorded; no algorithm/model version number is stored."
+  },
+  {
+   "field": "ai_observations",
+   "reason": "No AI observation has been generated in this session for this study (AI text is not stored by the platform)."
+  }
+ ],
+ "images": {
+  "original": "7b0b01469e43_original.png",
+  "variants": [
+   "femur",
+   "femur-meniscus",
+   "femur-meniscus-tibia",
+   "femur-tibia",
+   "meniscus",
+   "meniscus-tibia",
+   "tibia"
+  ],
+  "overlay_available": true,
+  "overlay_note": "Segmentation overlays are drawn from the stored zones/polygons; there are no saliency maps or pixel-level model explanations."
+ },
+ "ai_observations": [],
+ "notes": [
+  "This panel shows data lineage only. It does not explain why a model produced an answer, and no model confidence values exist or are shown.",
+  "Nothing here is clinically validated."
+ ]
+}
