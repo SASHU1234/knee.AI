@@ -147,7 +147,9 @@ shared service-role client) so those policies apply normally — see
 
 ## Deployment (Vercel)
 
-One Vercel project with two **services** (root `vercel.json`):
+**Currently deployed as two Vercel projects** (`knee-ai` = backend, root directory `backend/`; `knee-aii` = frontend, root directory `frontend/`). The backend project allows the frontend origin through `FRONTEND_URL`, and `frontend/.env.production` points `VITE_API_URL` at the backend project. The root `vercel.json` below is an alternative single-project (services) layout; if you switch to it, set `VITE_API_URL=/api`.
+
+Single-project layout with two **services** (root `vercel.json`):
 
 - **`backend`** (`backend/`, FastAPI, entrypoint `main:app`) is public only under `/api/*` through a top-level
   rewrite. Its routes already start with `/api`, and Vercel passes the original path through, so no path
