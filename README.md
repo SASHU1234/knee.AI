@@ -147,16 +147,22 @@ shared service-role client) so those policies apply normally — see
 
 ## Deployment (Vercel)
 
-Frontend and backend deploy as **two separate Vercel projects** from this one repo:
+One Vercel project with two **services** (root `vercel.json`):
 
-- **Backend** — root directory set to `backend/`, entrypoint `backend/api/index.py`
-  (`backend/vercel.json` routes everything to it). Set `SUPABASE_URL`, `SUPABASE_ANON_KEY`,
-  `OPENROUTER_API_KEY`, `OPENROUTER_CHAT_MODEL`, `OPENROUTER_ADVICE_MODEL`, and
-  `OPENROUTER_VISION_MODEL` as project environment variables.
-- **Frontend** — root directory `frontend/`, standard Vite build. `frontend/.env.production`
-  supplies `VITE_API_URL` (pointed at the backend project's URL) and the Supabase public config.
+- **`backend`** (`backend/`, FastAPI, entrypoint `main:app`) is public only under `/api/*` through a top-level
+  rewrite. Its routes already start with `/api`, and Vercel passes the original path through, so no path
+  rewriting is needed. Set `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `OPENROUTER_API_KEY`, `OPENROUTER_CHAT_MODEL`,
+  `OPENROUTER_ADVICE_MODEL`, `OPENROUTER_VISION_MODEL` and `PROVENANCE_SECRET` as project environment variables.
+- **`frontend`** (`frontend/`, Vite) serves every other path. `frontend/.env.production` sets
+  `VITE_API_URL=/api` (same origin, so no CORS) plus the public Supabase config; `frontend/vercel.json` keeps the
+  single-page-app fallback.
+- No service bindings: neither service calls the other server-side (the browser reaches the backend through the
+  `/api` rewrite; the backend only calls OpenRouter and Supabase).
+- Not available on Vercel: the local translation model (the API answers 503 and the UI keeps English) and durable
+  reviews until the `study_reviews` migration is applied (the local-file fallback does not persist there).
+- The old standalone `backend/vercel.json` is kept as `backend/vercel.legacy.json.disabled` for reference.
 
-Because the backend's root is `backend/` in production but the repo root locally, `backend/main.py`
+Because the backend service's root is `backend/` in production but the repo root locally, `backend/main.py`
 uses absolute imports (`import store`, `from routers import ...`) throughout — that's also why
 local dev launches uvicorn from *inside* `backend/` rather than from the repo root.
 
